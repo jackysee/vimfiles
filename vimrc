@@ -224,6 +224,8 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
 autocmd FileType c set omnifunc=ccomplete#Complete
 autocmd FileType java set omnifunc=javacomplete#Complete
+:highlight Pmenu guibg=black gui=bold
+:highlight PmenuSel guibg=blue gui=bold
 
 " use syntax complete if nothing else available
 if has("autocmd") && exists("+omnifunc")
