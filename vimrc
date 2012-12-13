@@ -29,14 +29,17 @@ autocmd! bufwritepost vimrc source ~/_vimrc
 syntax on		" syntax highlight
 set hlsearch		" search highlighting
 
-if has("gui_running")	" GUI color and font settings
-  set guifont=Consolas:h10
+if has("gui_running")	" GUI color and font settings8
+  "set guifont=Consolas:h10
+  set guifont=Source_Code_Pro_Semibold:h9
   set background=dark 
   set t_Co=256          " 256 color mode
   set cursorline        " highlight current line
-  colors hhazure 
-  colorscheme hhazure
-  highlight CursorLine          guibg=#003853 ctermbg=24  gui=none cterm=none
+  "colors hhazure 
+  "colorscheme hhazure
+  colors codeschool 
+  colorscheme codeschool
+  highlight CursorLine guibg=#003853 ctermbg=24  gui=none cterm=none
 endif
 
 set hidden              " hidden ui
@@ -178,24 +181,6 @@ vnoremap > >gv
 
 " :cd. change working directory to that of the current file
 cmap cd. lcd %:p:h
-
-" Writing Restructured Text (Sphinx Documentation) {
-   " Ctrl-u 1:    underline Parts w/ #'s
-   noremap  <C-u>1 yyPVr#yyjp
-   inoremap <C-u>1 <esc>yyPVr#yyjpA
-   " Ctrl-u 2:    underline Chapters w/ *'s
-   noremap  <C-u>2 yyPVr*yyjp
-   inoremap <C-u>2 <esc>yyPVr*yyjpA
-   " Ctrl-u 3:    underline Section Level 1 w/ ='s
-   noremap  <C-u>3 yypVr=
-   inoremap <C-u>3 <esc>yypVr=A
-   " Ctrl-u 4:    underline Section Level 2 w/ -'s
-   noremap  <C-u>4 yypVr-
-   inoremap <C-u>4 <esc>yypVr-A
-   " Ctrl-u 5:    underline Section Level 3 w/ ^'s
-   noremap  <C-u>5 yypVr^
-   inoremap <C-u>5 <esc>yypVr^A
-"}
 
 "--------------------------------------------------------------------------- 
 " PROGRAMMING SHORTCUTS
