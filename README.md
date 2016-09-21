@@ -4,9 +4,20 @@ For windows, you need to have `C:\Users\[username]\_vimrc` with
 
     source $VIM/vimfiles/vimrc
 
-then clone this project at vim install directories
+Clone this project at vim install directories. 
 
-Plugins: VimCompleteMe / emmet-vim / undotree / vim-commentry / vim-expand-region / vim-repeat / vim-sneak / vim-surround
+The cloned bundle is actually empty, please unzip the `bundle.tar.gz`. Or clone 
+
+# Plugins
+
+* VimCompleteMe  
+* emmet-vim 
+* undotree 
+* vim-commentry 
+* vim-expand-region 
+* vim-repeat 
+* vim-sneak 
+* vim-surround
 
 # Cheatsheet
 

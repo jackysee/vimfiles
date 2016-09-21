@@ -23,12 +23,17 @@ set noswapfile
 set copyindent
 set ignorecase
 set smartcase
-set cursorline
 set clipboard=unnamed
 set lines=50 columns=100
 
 " auto reload vimrc when editing it
 autocmd! bufwritepost vimrc source ~/_vimrc
+
+
+if !has("gui_running")	" running term
+  colors hhazure 
+  colorscheme hhazure
+endif
 
 if has("gui_running")	" GUI color and font settings8
   set guifont=Source_Code_Pro_Semibold:h9
