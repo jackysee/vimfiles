@@ -29,7 +29,6 @@ set lines=50 columns=100
 " auto reload vimrc when editing it
 autocmd! bufwritepost vimrc source ~/_vimrc
 
-
 if !has("gui_running")	" running term
   colors hhazure 
   colorscheme hhazure
@@ -203,6 +202,7 @@ execute pathogen#infect()
 
 " --- vim-sneak
 let g:sneak#s_next=1
+let g:sneak#streak=1
 
 
 
