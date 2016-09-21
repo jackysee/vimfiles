@@ -15,7 +15,7 @@ set showmatch
 set showmode
 set wildchar=<TAB>
 set wildmenu
-set wildignore=*.o,*.class,*.pyc,*.swp,*.bak
+set wildignore=*.o,*.class,*.pyc,*.swp,*.bak,node_modules,elm_stuff
 set autoindent
 set incsearch
 set nobackup
@@ -134,8 +134,6 @@ imap ,e <C-y>,
 vmap v <Plug>(expand_region_expand)
 vmap V <Plug>(expand_region_shrink)
 
-" commentary
-vmap <leader>c gc
 
 " autocomplete
 " f: filenames, i:keywords, l:whole lines, n:keywords in current file,
