@@ -16,6 +16,7 @@ Clone this project at vim install directories, unzip the `bundle.tar.gz`
 * vim-repeat 
 * vim-sneak 
 * vim-surround
+* vim-ack
 
 # Cheatsheet
 
@@ -25,6 +26,8 @@ Clone this project at vim install directories, unzip the `bundle.tar.gz`
 * emmet expand by `,e` in insert mode
 * expand region by `v/V`
 * comment by `gcc`
+* grep by `,a` (make use of ack -> ag)
+* search file by `,p`
 
 # Update this repository
 

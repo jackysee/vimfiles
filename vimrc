@@ -1,4 +1,5 @@
-" --- Settings
+" Settings
+" -----------------------------
 
 set nocompatible
 set tabstop=4 expandtab softtabstop=4 shiftwidth=4
@@ -86,9 +87,8 @@ endfunction
 "}
 
 
-"---------------------------------------------------------------------------
-" USEFUL SHORTCUTS
-"---------------------------------------------------------------------------
+" Shortcuts
+" -----------------------------
 " set leader to ,
 let mapleader=","
 let g:mapleader=","
@@ -154,15 +154,8 @@ set omnifunc=syntaxcomplete#Complete
 
 
 
-
-
-
-
-
-
-"---------------------------------------------------------------------------
-" ENCODING SETTINGS
-"---------------------------------------------------------------------------
+" Enconding
+" -----------------------------
 set encoding=utf-8
 
 set termencoding=utf-8
@@ -186,21 +179,28 @@ fun! Big5()
 	set fileencoding=big5
 endfun
 
-" --- whitespace
+" whitespace
+" -----------------------------
 set list listchars=tab:»-,trail:·
 
-" --- search
-
+" search
+" -----------------------------
+cnoreabbrev Ack Ack!
+nnoremap <leader>a :Ack!<Space>
+nnoremap ,p :Ack! -G  .<Left><Left>
 if executable("ag")
     set grepprg=ag\ --nogroup\ --nocolor\ --ignore-case\ --column
     set grepformat=%f:%l:%c:%m,%f:%l:%m
+    let g:ackprg = 'ag --vimgrep'
 endif
 
-" --- pathogen
+" pathogen
+" -----------------------------
 execute pathogen#infect()
 
 
-" --- vim-sneak
+" vim-sneak
+" -----------------------------
 let g:sneak#s_next=1
 let g:sneak#streak=1
 
