@@ -2,9 +2,11 @@
 " -----------------------------
 
 set nocompatible
+set bs=2
 set tabstop=4 expandtab softtabstop=4 shiftwidth=4
 set autoread
 set nowrap
+set textwidth=0
 filetype on
 filetype indent on
 filetype plugin on
@@ -25,7 +27,6 @@ set copyindent
 set ignorecase
 set smartcase
 set clipboard=unnamed
-set lines=50 columns=100
 
 " auto reload vimrc when editing it
 autocmd! bufwritepost vimrc source ~/_vimrc
@@ -36,6 +37,7 @@ if !has("gui_running")	" running term
 endif
 
 if has("gui_running")	" GUI color and font settings8
+  set lines=50 columns=100
   set guifont=Source_Code_Pro_Semibold:h9
   set background=dark
   set t_Co=256          " 256 color mode
@@ -187,12 +189,28 @@ set list listchars=tab:»-,trail:·
 " -----------------------------
 cnoreabbrev Ack Ack!
 nnoremap <leader>a :Ack!<Space>
-nnoremap ,p :Ack! -G  .<Left><Left>
+nnoremap ,p :FindFile<Space>
 if executable("ag")
     set grepprg=ag\ --nogroup\ --nocolor\ --ignore-case\ --column
     set grepformat=%f:%l:%c:%m,%f:%l:%m
     let g:ackprg = 'ag --vimgrep'
 endif
+
+fun! FindFiles(filename)
+    let error_file = tempname()
+    if has('win32')
+        silent exe '!dir /s/b '.a:filename.'. | sed "s/^.://g" | sed "s/$/:1:1/g" > '.error_file
+    endif
+    if !has('win32')
+        silent exe '!find . -iname "'.a:filename.'" | xargs file | sed "s/:/:1:/" > '.error_file
+    endif
+    set errorformat=%f:%l:%m
+    exe "cfile ". error_file
+    copen
+    call delete(error_file)
+endfun
+command! -nargs=1 FindFile call FindFiles(<q-args>)
+
 
 " pathogen
 " -----------------------------

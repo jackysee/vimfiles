@@ -27,7 +27,7 @@ Clone this project at vim install directories, unzip the `bundle.tar.gz`
 * expand region by `v/V`
 * comment by `gcc`
 * grep by `,a` (make use of ack -> ag)
-* search file by `,p`
+* search file by `,p` (use `dir /s/p` for windows,  `find` for other system)
 
 # Update this repository
 
