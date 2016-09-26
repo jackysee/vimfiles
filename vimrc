@@ -2,25 +2,15 @@
 " -----------------------------
 
 set nocompatible
-set bs=2
-set tabstop=4 expandtab softtabstop=4 shiftwidth=4
-set autoread
 set nowrap
 set textwidth=0
-filetype on
-filetype indent on
-filetype plugin on
-syntax on
 set hlsearch
 set number
 set title
 set showmatch
 set showmode
 set wildchar=<TAB>
-set wildmenu
 set wildignore=*.o,*.class,*.pyc,*.swp,*.bak,node_modules,elm_stuff
-set autoindent
-set incsearch
 set nobackup
 set noswapfile
 set copyindent
@@ -96,8 +86,8 @@ let mapleader=","
 let g:mapleader=","
 
 
-" ,/ turn off search highlight
-nmap <leader>/ :nohl<CR>
+" <C-L> turn off search highlight in sensible.vim
+nnoremap <leader>l :nohlsearch<CR>
 
 "; :
 nnoremap ; :
@@ -165,20 +155,20 @@ set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,big5,gb2312,latin1
 
 fun! ViewUTF8()
-	set encoding=utf-8
-	set termencoding=big5
+    set encoding=utf-8
+    set termencoding=big5
 endfun
 
 fun! UTF8()
-	set encoding=utf-8
-	set termencoding=big5
-	set fileencoding=utf-8
-	set fileencodings=ucs-bom,big5,utf-8,latin1
+    set encoding=utf-8
+    set termencoding=big5
+    set fileencoding=utf-8
+    set fileencodings=ucs-bom,big5,utf-8,latin1
 endfun
 
 fun! Big5()
-	set encoding=big5
-	set fileencoding=big5
+    set encoding=big5
+    set fileencoding=big5
 endfun
 
 " whitespace
