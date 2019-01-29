@@ -32,9 +32,9 @@ if has("gui_running")	" GUI color and font settings8
   set background=dark
   set t_Co=256          " 256 color mode
   set cursorline        " highlight current line
-  colors codeschool
-  colorscheme codeschool
-  highlight CursorLine guibg=#003853 ctermbg=24  gui=none cterm=none
+  colors hhazure
+  colorscheme hhazure
+  highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
 endif
 
 "gui options
@@ -175,31 +175,11 @@ endfun
 " -----------------------------
 set list listchars=tab:»-,trail:·
 
-" search
+" search (fzf)
 " -----------------------------
-cnoreabbrev Ack Ack!
-nnoremap <leader>a :Ack!<Space>
-nnoremap ,p :FindFile<Space>
-if executable("ag")
-    set grepprg=ag\ --nogroup\ --nocolor\ --ignore-case\ --column
-    set grepformat=%f:%l:%c:%m,%f:%l:%m
-    let g:ackprg = 'ag --vimgrep'
-endif
-
-fun! FindFiles(filename)
-    let error_file = tempname()
-    if has('win32')
-        silent exe '!dir /s/b '.a:filename.'. | sed "s/^.://g" | sed "s/$/:1:1/g" > '.error_file
-    endif
-    if !has('win32')
-        silent exe '!find . -iname "'.a:filename.'" | xargs file | sed "s/:/:1:/" > '.error_file
-    endif
-    set errorformat=%f:%l:%m
-    exe "cfile ". error_file
-    copen
-    call delete(error_file)
-endfun
-command! -nargs=1 FindFile call FindFiles(<q-args>)
+" scoop install fzf on windows
+set rtp+=/c/Users/jackys/scoop/shims/fzf
+nnoremap <leader>f :Files<cr>
 
 
 " pathogen
