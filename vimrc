@@ -5,7 +5,7 @@ set nocompatible
 set nowrap
 set textwidth=0
 set hlsearch
-set number
+set number relativenumber
 set title
 set showmatch
 set showmode
@@ -178,7 +178,11 @@ set list listchars=tab:»-,trail:·
 " search (fzf)
 " -----------------------------
 " scoop install fzf on windows
-set rtp+=/c/Users/jackys/scoop/shims/fzf
+if has("win32")
+    set rtp+=/c/Users/jackys/scoop/shims/fzf
+else
+    set rtp+=/usr/local/opt/fzf
+endif
 nnoremap <leader>f :Files<cr>
 
 
