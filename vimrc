@@ -11,12 +11,16 @@ set showmatch
 set showmode
 set wildchar=<TAB>
 set wildignore=*.o,*.class,*.pyc,*.swp,*.bak,node_modules,elm_stuff
+set wildmenu
+set wildmode=longest:list,full
 set nobackup
 set noswapfile
 set copyindent
 set ignorecase
 set smartcase
 set clipboard=unnamed
+set splitbelow
+set splitright
 
 " auto reload vimrc when editing it
 autocmd! bufwritepost vimrc source ~/_vimrc
