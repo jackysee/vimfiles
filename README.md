@@ -1,22 +1,19 @@
 # Vimfiles
 
-For windows, you need to have `C:\Users\[username]\_vimrc` with
+For windows, you need to have `C:\Users\[username]\_vimrc` with e.g.
 
-    source $VIM/vimfiles/vimrc
+    
+    set rtp+=c:/vimfiles/
+    source c:/vimfiles/vimrc
 
 Clone this project at vim install directories, unzip the `bundle.tar.gz` 
 
 # Plugins
 
-* VimCompleteMe  
-* emmet-vim 
-* undotree 
-* vim-commentry 
-* vim-expand-region 
-* vim-repeat 
-* vim-sneak 
-* vim-surround
-* vim-ack
+* See plug.vim
+* manual install plugin fzf, requires install fzf binary (e.g. on windows `scoop install fzf`)
+
+On fresh install, run `:PlugInstall`
 
 # Cheatsheet
 
@@ -26,11 +23,7 @@ Clone this project at vim install directories, unzip the `bundle.tar.gz`
 * emmet expand by `,e` in insert mode
 * expand region by `v/V`
 * comment by `gcc`
-* grep by `,a` (make use of ack -> ag)
-* search file by `,p` (use `dir /s/p` for windows,  `find` for other system)
+* search file using fzf by `,f`
 
-# Update this repository
-
-Repack the `bundle.tar.gz` and commit
 
 

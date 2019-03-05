@@ -1,3 +1,9 @@
+" In windows the ~/_vimrc 
+" need to :
+" set rtp+=c:/[loc_of_vimfiles]
+" source c:/[loc_of_vimfiles]/vimrc
+"
+
 " Settings
 " -----------------------------
 
@@ -22,22 +28,27 @@ set clipboard=unnamed
 set splitbelow
 set splitright
 
+" Plugins
+" -----------------------------
+let s:path = expand('<sfile>:p:h')
+execute 'source ' . s:path . '/plug.vim'
+
 " auto reload vimrc when editing it
 autocmd! bufwritepost vimrc source ~/_vimrc
 
 if !has("gui_running")	" running term
-  colors hhazure 
-  colorscheme hhazure
+  colors molokai 
+  colorscheme molokai 
 endif
 
 if has("gui_running")	" GUI color and font settings8
   set lines=50 columns=100
-  set guifont=Source_Code_Pro_Semibold:h9
+  set guifont=Fira_Code_Light:h9
   set background=dark
   set t_Co=256          " 256 color mode
   set cursorline        " highlight current line
-  colors hhazure
-  colorscheme hhazure
+  colors molokai
+  colorscheme molokai
   highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
 endif
 
@@ -148,8 +159,6 @@ inoremap <silent> ,u <C-x><C-u>
 
 set omnifunc=syntaxcomplete#Complete
 
-
-
 " Enconding
 " -----------------------------
 set encoding=utf-8
@@ -181,18 +190,15 @@ set list listchars=tab:»-,trail:·
 
 " search (fzf)
 " -----------------------------
-" scoop install fzf on windows
-if has("win32")
-    set rtp+=/c/Users/jackys/scoop/shims/fzf
-else
-    set rtp+=/usr/local/opt/fzf
-endif
-nnoremap <leader>f :Files<cr>
+"if has('win32') || has('win64')
+    " scoop install fzf on windows
+"    set rtp+=/c/Users/jackys/scoop/shims/fzf
+"else
+"    set rtp+=/usr/local/opt/fzf
+"endif
 
+nnoremap <leader>f :FZF<cr>
 
-" pathogen
-" -----------------------------
-execute pathogen#infect()
 
 
 " vim-sneak
@@ -200,5 +206,17 @@ execute pathogen#infect()
 let g:sneak#s_next=1
 let g:sneak#streak=1
 
+
+" ale
+" -----------------------------
+let g:ale_sign_column_always = 1
+
+
+" Prettier
+" -----------------------------
+let g:prettier#exec_cmd_path = 'src/frontend/node_modules/.bin/prettier'
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
+let g:prettier#config#config_precedence = 'file-override'
 
 
