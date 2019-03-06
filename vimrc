@@ -3,10 +3,8 @@
 " set rtp+=c:/[loc_of_vimfiles]
 " source c:/[loc_of_vimfiles]/vimrc
 "
-
 " Settings
 " -----------------------------
-
 set nocompatible
 set nowrap
 set textwidth=0
@@ -28,10 +26,60 @@ set clipboard=unnamed
 set splitbelow
 set splitright
 
+set timeoutlen=1000
+set ttimeoutlen=0
+
 " Plugins
 " -----------------------------
+"
+
 let s:path = expand('<sfile>:p:h')
-execute 'source ' . s:path . '/plug.vim'
+
+call plug#begin(s:path . '/plugged')
+
+"theme
+Plug 'ajh17/spacegray.vim'
+
+"snip
+"Plug 'SirVer/ultisnips'
+
+Plug 'ajh17/VimCompletesMe'
+
+Plug 'mattn/emmet-vim'
+
+Plug 'mbbill/undotree'
+
+Plug 'tpope/vim-commentary'
+
+Plug 'terryma/vim-expand-region'
+
+Plug 'tpope/vim-repeat'
+
+Plug 'tpope/vim-sensible'
+
+Plug 'justinmk/vim-sneak'
+
+Plug 'tpope/vim-surround'
+
+Plug 'itchyny/lightline.vim'
+
+Plug 'airblade/vim-gitgutter'
+
+
+" js / vue
+" ------
+
+Plug 'w0rp/ale'
+
+Plug 'pangloss/vim-javascript'
+
+Plug 'elzr/vim-json'
+
+Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 'css', 'scss', 'markdown', 'vue', 'html', 'yaml'] }
+
+Plug 'posva/vim-vue'
+
+call plug#end()
 
 " auto reload vimrc when editing it
 autocmd! bufwritepost vimrc source ~/_vimrc
@@ -43,7 +91,7 @@ endif
 
 if has("gui_running")	" GUI color and font settings8
   set lines=50 columns=100
-  set guifont=Fira_Code_Light:h9
+  set guifont=Anonymous_Pro:h10.5
   set background=dark
   set t_Co=256          " 256 color mode
   set cursorline        " highlight current line
@@ -115,7 +163,8 @@ vnoremap < <gv
 vnoremap > >gv
 
 " list buffer
-nnoremap <leader>b :b <C-d>
+"nnoremap <leader>b :b <C-d>
+nnoremap <leader>b :buffers<CR>:buffer<Space>
 
 " trim trailing space
 nnoremap <leader>s :call StripTrailingWhitespace()<cr>
@@ -199,8 +248,6 @@ set list listchars=tab:»-,trail:·
 
 nnoremap <leader>f :FZF<cr>
 
-
-
 " vim-sneak
 " -----------------------------
 let g:sneak#s_next=1
@@ -210,6 +257,12 @@ let g:sneak#streak=1
 " ale
 " -----------------------------
 let g:ale_sign_column_always = 1
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+let g:ale_sign_style_error = '✘'
+let g:ale_sign_style_warning = '⚠'
+highlight ALEErrorSign ctermbg=NONE ctermfg=red
+highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
 
 
 " Prettier
@@ -219,4 +272,14 @@ let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
 let g:prettier#config#config_precedence = 'file-override'
 
+" vim-vue
+" -----------------------------
+" let g:vue_disable_pre_processors=1
 
+
+" ultisnips
+" -----------------------------
+"let g:UltiSnipsSnippetDirectories=["ultisnips"]
+"let g:UltiSnipsExpandTrigger="<c-e>"
+"let g:UltiSnipsJumpForwardTrigger="<c-b>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
