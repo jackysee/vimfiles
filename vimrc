@@ -70,8 +70,6 @@ Plug 'Asheq/close-buffers.vim'
 
 " Plug 'airblade/vim-gitgutter'
 
-" Plug 'ctrlpvim/ctrlp.vim'
-
 Plug 'junegunn/fzf.vim'
 
 " js / vue
@@ -276,12 +274,8 @@ set list listchars=tab:»-,trail:·
 
 "let g:fzf_launcher = 'urxvt -geometry 120x30 -e sh -c %s'
 nnoremap <leader>f :FZF<cr>
+nnoremap <leader>r :Rg 
 
-"if executable('fd')
-"    let g:ctrlp_user_command = 'fd -c never "" "%s"'
-"    "let g:ctrlp_use_caching = 0
-"endif
-"nnoremap <leader>f :CtrlP<cr>
 
 " vim-sneak
 " -----------------------------
