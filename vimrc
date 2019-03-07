@@ -66,11 +66,13 @@ Plug 'tpope/vim-surround'
 
 Plug 'itchyny/lightline.vim'
 
+Plug 'Asheq/close-buffers.vim'
+
 " Plug 'airblade/vim-gitgutter'
 
 " Plug 'ctrlpvim/ctrlp.vim'
 
-" Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim'
 
 " js / vue
 " ------
@@ -87,6 +89,8 @@ Plug 'posva/vim-vue'
 
 Plug 'haya14busa/is.vim'
 
+"Plug 'mileszs/ack.vim'
+
 call plug#end()
 
 " auto reload vimrc when editing it
@@ -97,11 +101,14 @@ if !has("gui_running")	" running term
   colorscheme molokai 
 endif
 
-if has("gui_running")	" GUI color and font settings8set relativenumber
+if has("gui_running")	" GUI
+  au GUIEnter * simalt ~x
   set lines=50 columns=100
+  "set relativenumber
   "set guifont=Anonymous_Pro:h10.5
-  set guifont=Fira_Code_Light:h9
+  set guifont=Fira_Code_Medium:h10
   set background=dark
+  set linespace=1
   set t_Co=256          " 256 color mode
   "set cursorline        " highlight current line
   colors molokai
@@ -174,7 +181,8 @@ vnoremap > >gv
 
 " list buffer
 "nnoremap <leader>b :b <C-d>
-nnoremap <leader>b :buffers<CR>:buffer<Space>
+"nnoremap <leader>b :buffers<CR>:buffer<Space>
+nnoremap <leader>b :Buffers<CR>
 
 " trim trailing space
 nnoremap <leader>s :call StripTrailingWhitespace()<cr>
@@ -266,6 +274,7 @@ set list listchars=tab:»-,trail:·
 " \           : fzf#vim#with_preview('right:50%:hidden', '?'),
 " \   <bang>0)
 
+"let g:fzf_launcher = 'urxvt -geometry 120x30 -e sh -c %s'
 nnoremap <leader>f :FZF<cr>
 
 "if executable('fd')
@@ -319,3 +328,6 @@ augroup qs_colors
   autocmd ColorScheme * highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
   autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
 augroup END
+
+" ack
+" let g:ackprg = 'rg --vimgrep --no-heading'
