@@ -1,8 +1,8 @@
-" In windows the ~/_vimrc 
+" notes for windows the ~/_vimrc 
 " need to :
-" set rtp+=c:/[loc_of_vimfiles]
-" source c:/[loc_of_vimfiles]/vimrc
-"
+"   set rtp+=c:/[loc_of_vimfiles]
+"   source c:/[loc_of_vimfiles]/vimrc
+
 " Settings
 " -----------------------------
 set nocompatible
