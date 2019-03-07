@@ -9,7 +9,8 @@ set nocompatible
 set nowrap
 set textwidth=0
 set hlsearch
-set number relativenumber
+set number
+set relativenumber
 set title
 set showmatch
 set showmode
@@ -28,6 +29,7 @@ set splitright
 
 set timeoutlen=1000
 set ttimeoutlen=0
+set lazyredraw
 
 " Plugins
 " -----------------------------
@@ -59,12 +61,17 @@ Plug 'tpope/vim-sensible'
 
 Plug 'justinmk/vim-sneak'
 
+Plug 'unblevable/quick-scope' 
+
 Plug 'tpope/vim-surround'
 
 Plug 'itchyny/lightline.vim'
 
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
 
+" Plug 'ctrlpvim/ctrlp.vim'
+
+" Plug 'junegunn/fzf.vim'
 
 " js / vue
 " ------
@@ -79,6 +86,8 @@ Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 
 
 Plug 'posva/vim-vue'
 
+Plug 'haya14busa/is.vim'
+
 call plug#end()
 
 " auto reload vimrc when editing it
@@ -91,10 +100,11 @@ endif
 
 if has("gui_running")	" GUI color and font settings8
   set lines=50 columns=100
-  set guifont=Anonymous_Pro:h10.5
+  "set guifont=Anonymous_Pro:h10.5
+  set guifont=Fira_Code_Light:h9
   set background=dark
   set t_Co=256          " 256 color mode
-  set cursorline        " highlight current line
+  "set cursorline        " highlight current line
   colors molokai
   colorscheme molokai
   highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
@@ -153,6 +163,7 @@ let g:mapleader=","
 nnoremap <leader>l :nohlsearch<CR>
 
 "; :
+nnoremap > ;
 nnoremap ; :
 
 "space to page down
@@ -238,15 +249,31 @@ endfun
 set list listchars=tab:»-,trail:·
 
 " search (fzf)
+" setting on windows :
+"   scoop install fzf 
+"   scoop install ripgrep 
+"   set FZF_DEFAULT_COMMAND='rg --files'
 " -----------------------------
-"if has('win32') || has('win64')
-    " scoop install fzf on windows
-"    set rtp+=/c/Users/jackys/scoop/shims/fzf
-"else
-"    set rtp+=/usr/local/opt/fzf
-"endif
+" if has('win32') || has('win64')
+"     set rtp+=/c/Users/jackys/scoop/shims/fzf
+" else
+"     set rtp+=/usr/local/opt/fzf
+" endif
+
+" command! -bang -nargs=* Rg
+" \ call fzf#vim#grep(
+" \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+" \   <bang>0 ? fzf#vim#with_preview('up:60%')
+" \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+" \   <bang>0)
 
 nnoremap <leader>f :FZF<cr>
+
+"if executable('fd')
+"    let g:ctrlp_user_command = 'fd -c never "" "%s"'
+"    "let g:ctrlp_use_caching = 0
+"endif
+"nnoremap <leader>f :CtrlP<cr>
 
 " vim-sneak
 " -----------------------------
@@ -256,11 +283,11 @@ let g:sneak#streak=1
 
 " ale
 " -----------------------------
-let g:ale_sign_column_always = 1
-let g:ale_sign_error = '✘'
-let g:ale_sign_warning = '⚠'
-let g:ale_sign_style_error = '✘'
-let g:ale_sign_style_warning = '⚠'
+"let g:ale_sign_column_always = 1
+let g:ale_sign_error = 'x'
+let g:ale_sign_warning = '!'
+let g:ale_sign_style_error = 'x'
+let g:ale_sign_style_warning = '!' 
 highlight ALEErrorSign ctermbg=NONE ctermfg=red
 highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
 
@@ -274,7 +301,7 @@ let g:prettier#config#config_precedence = 'file-override'
 
 " vim-vue
 " -----------------------------
-" let g:vue_disable_pre_processors=1
+let g:vue_disable_pre_processors=1
 
 
 " ultisnips
@@ -283,3 +310,13 @@ let g:prettier#config#config_precedence = 'file-override'
 "let g:UltiSnipsExpandTrigger="<c-e>"
 "let g:UltiSnipsJumpForwardTrigger="<c-b>"
 "let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" quick-scope
+" -----------------------------
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+let g:qs_lazy_highlight = 1
+augroup qs_colors
+  autocmd!
+  autocmd ColorScheme * highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+  autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+augroup END
