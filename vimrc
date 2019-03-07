@@ -10,7 +10,6 @@ set nowrap
 set textwidth=0
 set hlsearch
 set number
-set relativenumber
 set title
 set showmatch
 set showmode
@@ -98,7 +97,7 @@ if !has("gui_running")	" running term
   colorscheme molokai 
 endif
 
-if has("gui_running")	" GUI color and font settings8
+if has("gui_running")	" GUI color and font settings8set relativenumber
   set lines=50 columns=100
   "set guifont=Anonymous_Pro:h10.5
   set guifont=Fira_Code_Light:h9
