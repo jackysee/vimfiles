@@ -95,11 +95,6 @@ Plug 'posva/vim-vue'
 Plug 'haya14busa/is.vim'
 
 Plug 'terryma/vim-multiple-cursors'
-"Plug 'mileszs/ack.vim'
-"
-"Plug 'tpope/vim-fugitive'
-
-"Plug 'nathanaelkane/vim-indent-guides'
 
 Plug 'danro/rename.vim'
 
@@ -107,10 +102,16 @@ Plug 'sgur/vim-editorconfig'
 
 Plug 'ap/vim-css-color'
 
+Plug 'rhysd/clever-f.vim'
+
 call plug#end()
 
 " auto reload vimrc when editing it
-autocmd! bufwritepost vimrc source ~/_vimrc
+if has('win32') || has('win64')
+  autocmd! bufwritepost vimrc source ~/_vimrc
+else
+  autocmd! bufwritepost vimrc source ~/.vimrc
+endif
 
 if !has("gui_running")	" running term
   colors molokai 
