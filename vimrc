@@ -25,6 +25,7 @@ set smartcase
 set clipboard=unnamed
 set splitbelow
 set splitright
+set fileformats=unix
 
 set timeoutlen=1000
 set ttimeoutlen=0
@@ -42,7 +43,7 @@ call plug#begin(s:path . '/plugged')
 Plug 'ajh17/spacegray.vim'
 
 "snip
-"Plug 'SirVer/ultisnips'
+Plug 'SirVer/ultisnips'
 
 Plug 'ajh17/VimCompletesMe'
 
@@ -60,7 +61,7 @@ Plug 'tpope/vim-sensible'
 
 Plug 'justinmk/vim-sneak'
 
-Plug 'unblevable/quick-scope' 
+" Plug 'unblevable/quick-scope' 
 
 Plug 'tpope/vim-surround'
 
@@ -71,6 +72,7 @@ Plug 'Asheq/close-buffers.vim'
 " Plug 'airblade/vim-gitgutter'
 
 Plug 'junegunn/fzf.vim'
+Plug 'kien/ctrlp.vim'
 
 " js / vue
 " ------
@@ -87,7 +89,15 @@ Plug 'posva/vim-vue'
 
 Plug 'haya14busa/is.vim'
 
+Plug 'terryma/vim-multiple-cursors'
 "Plug 'mileszs/ack.vim'
+"
+"Plug 'tpope/vim-fugitive'
+
+"Plug 'nathanaelkane/vim-indent-guides'
+
+Plug 'danro/rename.vim'
+
 
 call plug#end()
 
@@ -102,7 +112,7 @@ endif
 if has("gui_running")	" GUI
   au GUIEnter * simalt ~x
   set lines=50 columns=100
-  "set relativenumber
+  set relativenumber
   "set guifont=Anonymous_Pro:h10.5
   set guifont=Fira_Code_Medium:h10
   set background=dark
@@ -117,6 +127,8 @@ endif
 "gui options
 set guioptions-=T
 set guioptions-=m
+set guioptions-=r
+set guioptions-=l
 
 " disable sound on errors
 set noerrorbells
@@ -134,11 +146,12 @@ set tm=500
 "}
 
 " status line {
-set laststatus=2
-set statusline=\ %{HasPaste()}%<%-15.25(%f%)%m%r%h\ %w\ \
-set statusline+=\ \ \ [%{&ff}/%Y]
-set statusline+=\ \ \ %<%20.30(%{hostname()}:%{CurDir()}%)\
-set statusline+=%=%-10.(%l,%c%V%)\ %p%%/%L
+set noshowmode
+" set laststatus=2
+" set statusline=\ %{HasPaste()}%<%-15.25(%f%)%m%r%h\ %w\ \
+" set statusline+=\ \ \ [%{&ff}/%Y]
+" set statusline+=\ \ \ %<%20.30(%{hostname()}:%{CurDir()}%)\
+" set statusline+=%=%-10.(%l,%c%V%)\ %p%%/%L
 
 function! CurDir()
     let curdir = substitute(getcwd(), $HOME, "~", "")
@@ -167,11 +180,12 @@ let g:mapleader=","
 nnoremap <leader>l :nohlsearch<CR>
 
 "; :
-nnoremap > ;
 nnoremap ; :
+nnoremap > ;
 
 "space to page down
 nnoremap <SPACE> <PAGEDOWN>
+nnoremap <S-SPACE> <PAGEUP>
 
 " indent in visual model
 vnoremap < <gv
@@ -180,7 +194,9 @@ vnoremap > >gv
 " list buffer
 "nnoremap <leader>b :b <C-d>
 "nnoremap <leader>b :buffers<CR>:buffer<Space>
-nnoremap <leader>b :Buffers<CR>
+"nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>b :CtrlPBuffer<CR>
+nnoremap <leader>r :CtrlPMRUFiles<CR>
 
 " trim trailing space
 nnoremap <leader>s :call StripTrailingWhitespace()<cr>
@@ -224,6 +240,11 @@ inoremap <silent> ,u <C-x><C-u>
 
 set omnifunc=syntaxcomplete#Complete
 
+"VimCompletesMe
+let g:vcm_default_map = 0
+imap <C-j> <plug>vim_completes_me_forward
+imap <C-k> <plug>vim_completes_me_backward
+
 " Enconding
 " -----------------------------
 set encoding=utf-8
@@ -253,6 +274,17 @@ endfun
 " -----------------------------
 set list listchars=tab:»-,trail:·
 
+"" ctrlp
+if executable('rg')
+  set grepprg=rg\ --color=never
+  let g:ctrlp_user_command = 'rg --files --color=never "" %s'
+  "let g:ctrlp_user_command = 'fd --type f --color never "" %s'
+  let g:ctrlp_use_caching = 1
+endif
+nnoremap <leader>f :CtrlP<cr>
+
+
+
 " search (fzf)
 " setting on windows :
 "   scoop install fzf 
@@ -273,8 +305,8 @@ set list listchars=tab:»-,trail:·
 " \   <bang>0)
 
 "let g:fzf_launcher = 'urxvt -geometry 120x30 -e sh -c %s'
-nnoremap <leader>f :FZF<cr>
-nnoremap <leader>r :Rg 
+" nnoremap <leader>f :FZF<cr>
+" nnoremap <leader>r :Rg 
 
 
 " vim-sneak
@@ -286,12 +318,13 @@ let g:sneak#streak=1
 " ale
 " -----------------------------
 "let g:ale_sign_column_always = 1
-let g:ale_sign_error = 'x'
-let g:ale_sign_warning = '!'
-let g:ale_sign_style_error = 'x'
-let g:ale_sign_style_warning = '!' 
-highlight ALEErrorSign ctermbg=NONE ctermfg=red
-highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+" let g:ale_sign_error = 'x'
+" let g:ale_sign_warning = '!'
+" let g:ale_sign_style_error = 'x'
+" let g:ale_sign_style_warning = '!' 
+" highlight ALEErrorSign ctermbg=NONE ctermfg=red
+" highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+let g:ale_lint_on_text_changed = 'normal'
 
 
 " Prettier
@@ -308,7 +341,7 @@ let g:vue_disable_pre_processors=1
 
 " ultisnips
 " -----------------------------
-"let g:UltiSnipsSnippetDirectories=["ultisnips"]
+let g:UltiSnipsEditSplit="vertical"
 "let g:UltiSnipsExpandTrigger="<c-e>"
 "let g:UltiSnipsJumpForwardTrigger="<c-b>"
 "let g:UltiSnipsJumpBackwardTrigger="<c-z>"
