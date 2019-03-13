@@ -28,6 +28,10 @@ set splitbelow
 set splitright
 set fileformats=unix
 
+if !has('win32') && !has('win64')
+  set cursorline
+endif
+
 set timeoutlen=1000
 set ttimeoutlen=0
 set lazyredraw
@@ -99,6 +103,7 @@ Plug 'terryma/vim-multiple-cursors'
 
 Plug 'danro/rename.vim'
 
+Plug 'sgur/vim-editorconfig'
 
 call plug#end()
 
@@ -278,8 +283,11 @@ set list listchars=tab:»-,trail:·
 "" ctrlp
 if executable('rg')
   set grepprg=rg\ --color=never
-  let g:ctrlp_user_command = 'rg --files --color=never "" %s'
-  "let g:ctrlp_user_command = 'fd --type f --color never "" %s'
+  if has('win32') || has('win64')
+    let g:ctrlp_user_command = 'rg --files --color=never "" %s'
+  else
+    let g:ctrlp_user_command = 'rg --files --color=never %s'
+  endif
   let g:ctrlp_use_caching = 1
 endif
 nnoremap <leader>f :CtrlP<cr>
