@@ -1,1 +1,26 @@
 extends html, javascript, css
+
+snippet ico "ico"
+import $1 from '@/components/$1.vue';
+endsnippet
+
+snippet tt "tt"
+{{\$t('$0')}}
+endsnippet
+
+snippet vue "vue sfc"
+<style>
+</style>
+
+<template>
+    <div>
+    </div>
+</template>
+
+<script>
+
+export default {
+    ${1}
+};
+</script>
+endsnippet

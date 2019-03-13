@@ -105,6 +105,8 @@ Plug 'danro/rename.vim'
 
 Plug 'sgur/vim-editorconfig'
 
+Plug 'ap/vim-css-color'
+
 call plug#end()
 
 " auto reload vimrc when editing it
@@ -134,7 +136,7 @@ endif
 set guioptions-=T
 set guioptions-=m
 set guioptions-=r
-set guioptions-=l
+set guioptions-=L
 
 " disable sound on errors
 set noerrorbells
@@ -284,7 +286,7 @@ set list listchars=tab:»-,trail:·
 if executable('rg')
   set grepprg=rg\ --color=never
   if has('win32') || has('win64')
-    let g:ctrlp_user_command = 'rg --files --color=never "" %s'
+    let g:ctrlp_user_command = 'rg --files --color=never %s'
   else
     let g:ctrlp_user_command = 'rg --files --color=never %s'
   endif
