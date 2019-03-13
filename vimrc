@@ -10,6 +10,7 @@ set nowrap
 set textwidth=0
 set hlsearch
 set number
+set relativenumber
 set title
 set showmatch
 set showmode
