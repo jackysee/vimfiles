@@ -41,71 +41,37 @@ set lazyredraw
 "
 
 let s:path = expand('<sfile>:p:h')
-
 call plug#begin(s:path . '/plugged')
-
 "theme
 Plug 'ajh17/spacegray.vim'
-
 "snip
 Plug 'SirVer/ultisnips'
-
 Plug 'ajh17/VimCompletesMe'
-
 Plug 'mattn/emmet-vim'
-
 Plug 'mbbill/undotree'
-
 Plug 'tpope/vim-commentary'
-
 Plug 'terryma/vim-expand-region'
-
 Plug 'tpope/vim-repeat'
-
 Plug 'tpope/vim-sensible'
-
 Plug 'justinmk/vim-sneak'
-
-" Plug 'unblevable/quick-scope' 
-
 Plug 'tpope/vim-surround'
-
 Plug 'itchyny/lightline.vim'
-
 Plug 'Asheq/close-buffers.vim'
-
-" Plug 'airblade/vim-gitgutter'
-
 Plug 'junegunn/fzf.vim'
 Plug 'kien/ctrlp.vim'
+Plug 'rhysd/clever-f.vim'
+Plug 'danro/rename.vim'
+Plug 'haya14busa/is.vim'
 
 " js / vue
 " ------
-
 Plug 'w0rp/ale'
-
 Plug 'pangloss/vim-javascript'
-
 Plug 'elzr/vim-json'
-
 Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 'css', 'scss', 'markdown', 'vue', 'html', 'yaml'] }
-
 Plug 'posva/vim-vue'
-
-Plug 'haya14busa/is.vim'
-
-Plug 'terryma/vim-multiple-cursors'
-
-Plug 'danro/rename.vim'
-
 Plug 'sgur/vim-editorconfig'
-
-" Plug 'ap/vim-css-color'
-
 Plug 'gorodinskiy/vim-coloresque'
-
-Plug 'rhysd/clever-f.vim'
-
 call plug#end()
 
 " auto reload vimrc when editing it
