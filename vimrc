@@ -100,7 +100,9 @@ Plug 'danro/rename.vim'
 
 Plug 'sgur/vim-editorconfig'
 
-Plug 'ap/vim-css-color'
+" Plug 'ap/vim-css-color'
+
+Plug 'gorodinskiy/vim-coloresque'
 
 Plug 'rhysd/clever-f.vim'
 
