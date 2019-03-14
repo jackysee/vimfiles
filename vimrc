@@ -298,7 +298,13 @@ if executable('rg')
   endif
   let g:ctrlp_use_caching = 1
 endif
-nnoremap <leader>f :CtrlP<cr>
+
+if has('win32') || has('win64')
+    nnoremap <leader>f :CtrlP<cr>
+else
+    "fzf is much faster in *nix
+    nnoremap <leader>f :FZF<cr>
+endif
 
 
 
