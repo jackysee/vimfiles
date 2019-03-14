@@ -303,6 +303,7 @@ if has('win32') || has('win64')
     nnoremap <leader>f :CtrlP<cr>
 else
     "fzf is much faster in *nix
+    set rtp+=~/.fzf/bin/fzf
     nnoremap <leader>f :FZF<cr>
 endif
 
