@@ -90,8 +90,8 @@ if has("gui_running")	" GUI
   au GUIEnter * simalt ~x
   set lines=50 columns=100
   set relativenumber
-  "set guifont=Anonymous_Pro:h10.5
-  set guifont=Fira_Code_Medium:h10
+  set guifont=Anonymous_Pro:h11
+  "set guifont=Fira_Code_Medium:h10
   set background=dark
   set linespace=1
   set t_Co=256          " 256 color mode
@@ -269,7 +269,7 @@ if has('win32') || has('win64')
     nnoremap <leader>f :CtrlP<cr>
 else
     "fzf is much faster in *nix
-    set rtp+=~/.fzf/bin/fzf
+    set rtp+=~/.fzf
     nnoremap <leader>f :FZF<cr>
 endif
 
