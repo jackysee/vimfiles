@@ -200,8 +200,8 @@ nnoremap <C-H> <C-W><C-H>
 imap ,e <C-y>,
 
 " vim-expand-region
-map K <Plug>(expand_region_expand)
-map J <Plug>(expand_region_shrink)
+" map K <Plug>(expand_region_expand)
+" map J <Plug>(expand_region_shrink)
 call expand_region#custom_text_objects({
             \ 'it':1
             \ })
