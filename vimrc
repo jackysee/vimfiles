@@ -1,7 +1,7 @@
 " notes for windows the ~/_vimrc 
 " need to :
 "   set rtp+=c:/[loc_of_vimfiles]
-"   source c:/[loc_of_vimfiles]/vimrc
+"   source c:/[loc_of_vimfiles]el/vimrc
 
 " Settings
 " -----------------------------
@@ -26,12 +26,7 @@ set smartcase
 set clipboard=unnamed
 set splitbelow
 set splitright
-set fileformats=unix
-
-if !has('win32') && !has('win64')
-  set cursorline
-endif
-
+"set fileformats=unix
 set timeoutlen=1000
 set ttimeoutlen=0
 set lazyredraw
@@ -81,24 +76,25 @@ else
   autocmd! bufwritepost vimrc source ~/.vimrc
 endif
 
-if !has("gui_running")	" running term
-  colors molokai 
-  colorscheme molokai 
-endif
+colors molokai 
+colorscheme molokai 
+
+" if !has("gui_running")	" running term
+" endif
 
 if has("gui_running")	" GUI
   au GUIEnter * simalt ~x
-  set lines=50 columns=100
+  " set lines=50 columns=100
   set relativenumber
   set guifont=Anonymous_Pro:h11
   "set guifont=Fira_Code_Medium:h10
   set background=dark
   set linespace=1
   set t_Co=256          " 256 color mode
-  "set cursorline        " highlight current line
+  set cursorline
   colors molokai
   colorscheme molokai
-  highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
+  "highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
 endif
 
 "gui options
@@ -257,13 +253,22 @@ set list listchars=tab:»-,trail:·
 "" ctrlp
 if executable('rg')
   set grepprg=rg\ --color=never
+  let g:ctrlp_fallback_command = 'rg --files --color=never %s'
+else
   if has('win32') || has('win64')
-    let g:ctrlp_user_command = 'rg --files --color=never %s'
+    let g:ctrlp_fallback_command = 'dir %s /-n /b /s /a-d'  " Windows
   else
-    let g:ctrlp_user_command = 'rg --files --color=never %s'
+    let g:ctrlp_fallback_command = 'find %s -type f'        " MacOSX/Linux
   endif
-  let g:ctrlp_use_caching = 1
 endif
+
+let g:ctrlp_user_command = {
+	\ 'types': {
+		\ 1: ['.git', 'cd %s && git ls-files'],
+		\ 2: ['.hg', 'hg --cwd %s locate -I .'],
+		\ },
+	\ 'fallback': g:ctrlp_fallback_command
+	\ }
 
 if has('win32') || has('win64')
     nnoremap <leader>f :CtrlP<cr>
@@ -326,7 +331,7 @@ let g:prettier#config#config_precedence = 'file-override'
 
 " vim-vue
 " -----------------------------
-let g:vue_disable_pre_processors=1
+" let g:vue_disable_pre_processors=1
 
 
 " ultisnips
