@@ -331,7 +331,8 @@ let g:prettier#config#config_precedence = 'file-override'
 
 " vim-vue
 " -----------------------------
-" let g:vue_disable_pre_processors=1
+au BufNewFile,BufRead *.vue set filetype=html
+let g:vue_disable_pre_processors=1
 
 
 " ultisnips
