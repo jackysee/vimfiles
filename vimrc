@@ -170,6 +170,8 @@ vnoremap > >gv
 "nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>b :CtrlPBuffer<CR>
 nnoremap <leader>r :CtrlPMRUFiles<CR>
+noremap <left> :bp<CR>
+noremap <right> :bn<CR>
 
 " trim trailing space
 nnoremap <leader>s :call StripTrailingWhitespace()<cr>
