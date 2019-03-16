@@ -52,11 +52,21 @@ Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-surround'
 Plug 'itchyny/lightline.vim'
 Plug 'Asheq/close-buffers.vim'
-Plug 'junegunn/fzf.vim'
-Plug 'kien/ctrlp.vim'
 Plug 'rhysd/clever-f.vim'
 Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
+
+" file finder
+Plug 'junegunn/fzf.vim'
+Plug 'kien/ctrlp.vim'
+" Plug 'Shougo/denite.nvim'
+" Plug 'Shougo/neomru.vim'
+
+if has('win32') || has('win64')
+ Plug 'Yggdroot/LeaderF', { 'do': './install.bat' }
+else
+ Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+endif
 
 " js / vue
 " ------
@@ -69,6 +79,12 @@ Plug 'sgur/vim-editorconfig'
 Plug 'gorodinskiy/vim-coloresque'
 Plug 'Raimondi/delimitMate'
 call plug#end()
+
+" set shell
+if executable('zsh')
+    set shell=/usr/local/bin/zsh
+endif
+
 
 " auto reload vimrc when editing it
 if has('win32') || has('win64')
@@ -169,8 +185,6 @@ vnoremap > >gv
 "nnoremap <leader>b :b <C-d>
 "nnoremap <leader>b :buffers<CR>:buffer<Space>
 "nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>b :CtrlPBuffer<CR>
-nnoremap <leader>r :CtrlPMRUFiles<CR>
 noremap <left> :bp<CR>
 noremap <right> :bn<CR>
 
@@ -254,6 +268,7 @@ endfun
 set list listchars=tab:»-,trail:·
 
 "" ctrlp
+" -----------------------------
 if executable('rg')
   set grepprg=rg\ --color=never
   let g:ctrlp_fallback_command = 'rg --files --color=never %s'
@@ -267,20 +282,66 @@ endif
 
 let g:ctrlp_user_command = {
 	\ 'types': {
-		\ 1: ['.git', 'cd %s && git ls-files'],
+		\ 1: ['.git', 'cd %s && git ls-tree -r --name-only HEAD'],
 		\ 2: ['.hg', 'hg --cwd %s locate -I .'],
 		\ },
 	\ 'fallback': g:ctrlp_fallback_command
 	\ }
 
 if has('win32') || has('win64')
-    nnoremap <leader>f :CtrlP<cr>
+    nnoremap <C-P> :CtrlP<cr>
 else
     "fzf is much faster in *nix
     set rtp+=~/.fzf
-    nnoremap <leader>f :FZF<cr>
+    nnoremap <C-P> :FZF<cr>
 endif
 
+
+" denite
+" -----------------------------
+" call denite#custom#var('file/rec', 'command',
+" \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+
+" call denite#custom#var('file/rec', 'command',
+"     \ ['rg', '--files', '--glob', '!.git'])
+
+" call denite#custom#alias('source', 'file/rec/git', 'file/rec')
+" call denite#custom#var('file/rec/git', 'command',
+"     \ ['git', 'ls-tree', '-r' ,'--name-only', 'HEAD'])
+
+" call denite#custom#alias('source', 'file/rec/hg', 'file/rec')
+" call denite#custom#var('file/rec/hg', 'command', ['hg', 'files'])
+
+
+" function! DeniteFileRec()
+"     if finddir('.git', ';') != ''
+"         return 'file/rec/git'
+"     elseif finddir('.hg', ';') != ''
+"         return 'file/rec/hg'
+"     else
+"         return 'file/rec'
+" endfunction
+
+" nnoremap <silent> <leader>d :<C-u>Denite `DeniteFileRec()` buffer file_mru<CR>
+
+" call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
+" call denite#custom#map('insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
+
+" leaderF
+"
+" let g:Lf_ShortcutF = '<leader>.'
+"
+" nnoremap <leader>b :CtrlPBuffer<CR>
+" nnoremap <leader>r :CtrlPMRUFiles<CR>
+nnoremap <leader>r :LeaderfMru<CR>
+let g:Lf_WindowHeight = 0.30
+let g:Lf_MruFileExclude = ['*.so', '*.tmp', '*.bak', '*.exe', '*.dll']
+let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
+" nnoremap <space>f :LeaderfFunctionAll<cr>
+" nnoremap <space>b :LeaderfBufferAll<cr>
+" nnoremap <space>e :LeaderfFileFullScreen<cr>
+" nnoremap <space>m :LeaderfMru<cr>
+" nnoremap <space>l :LeaderfLineAll<cr>
 
 
 " search (fzf)
@@ -294,18 +355,6 @@ endif
 " else
 "     set rtp+=/usr/local/opt/fzf
 " endif
-
-" command! -bang -nargs=* Rg
-" \ call fzf#vim#grep(
-" \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-" \   <bang>0 ? fzf#vim#with_preview('up:60%')
-" \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-" \   <bang>0)
-
-"let g:fzf_launcher = 'urxvt -geometry 120x30 -e sh -c %s'
-" nnoremap <leader>f :FZF<cr>
-" nnoremap <leader>r :Rg 
-
 
 " vim-sneak
 " -----------------------------

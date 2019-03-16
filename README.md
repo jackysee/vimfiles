@@ -15,13 +15,12 @@ On fresh install, run `:PlugInstall`
 
 # Cheatsheet
 
-* list buffer (:CtrlPBuffers) `,b`
-* file finder (:CtrlP) `,f`
-* recent files (:CtrlPMRUFiles) ,r
+* file finder `,f`
+* find buffer `,b`
+* recent files `,r`
 * undotree `F5`
 * jump spit directly by `<C-J/K/L/H>`
 * emmet expand by `,e` in insert mode
-* expand region by `v/V`
 * comment by `gcc`
 
 
