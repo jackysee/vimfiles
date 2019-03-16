@@ -67,6 +67,7 @@ Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 
 Plug 'posva/vim-vue'
 Plug 'sgur/vim-editorconfig'
 Plug 'gorodinskiy/vim-coloresque'
+Plug 'Raimondi/delimitMate'
 call plug#end()
 
 " auto reload vimrc when editing it
