@@ -41,10 +41,20 @@ call plug#begin(s:path . '/plugged')
 Plug 'ajh17/spacegray.vim'
 "snip
 Plug 'SirVer/ultisnips'
-Plug 'ajh17/VimCompletesMe'
+" Plug 'ajh17/VimCompletesMe'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
-Plug 'tpope/vim-commentary'
+" Plug 'tpope/vim-commentary'
+Plug 'tyru/caw.vim'
+Plug 'Shougo/context_filetype.vim'
 Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
@@ -71,10 +81,10 @@ endif
 " js / vue
 " ------
 Plug 'w0rp/ale'
-Plug 'pangloss/vim-javascript'
+Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html', 'vue'] }
 Plug 'elzr/vim-json'
 Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 'css', 'scss', 'markdown', 'vue', 'html', 'yaml'] }
-Plug 'posva/vim-vue'
+" Plug 'posva/vim-vue'
 Plug 'sgur/vim-editorconfig'
 Plug 'gorodinskiy/vim-coloresque'
 Plug 'Raimondi/delimitMate'
@@ -223,20 +233,46 @@ call expand_region#custom_text_objects({
 " autocomplete
 " f: filenames, i:keywords, l:whole lines, n:keywords in current file,
 " o:omnicompletion, ]:tags, u:user
-inoremap <silent> ,f <C-x><C-f>
-inoremap <silent> ,i <C-x><C-i>
-inoremap <silent> ,l <C-x><C-l>
-inoremap <silent> ,n <C-x><C-n>
-inoremap <silent> ,o <C-x><C-o>
-inoremap <silent> ,t <C-x><C-]>
-inoremap <silent> ,u <C-x><C-u>
+" inoremap <silent> ,f <C-x><C-f>
+" inoremap <silent> ,i <C-x><C-i>
+" inoremap <silent> ,l <C-x><C-l>
+" inoremap <silent> ,n <C-x><C-n>
+" inoremap <silent> ,o <C-x><C-o>
+" inoremap <silent> ,t <C-x><C-]>
+" inoremap <silent> ,u <C-x><C-u>
 
-set omnifunc=syntaxcomplete#Complete
+" set omnifunc=syntaxcomplete#Complete
 
 "VimCompletesMe
-let g:vcm_default_map = 0
-imap <C-j> <plug>vim_completes_me_forward
-imap <C-k> <plug>vim_completes_me_backward
+" let g:vcm_default_map = 0
+" imap <C-j> <plug>vim_completes_me_forward
+" imap <C-k> <plug>vim_completes_me_backward
+
+" deoplete
+" -----------------------------
+set completeopt=longest,menuone,preview
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources = {}
+let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips']
+inoremap <expr><C-g>     deoplete#undo_completion()
+" let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips', 'ternjs']
+" let g:deoplete#enable_ignore_case = 1
+" let g:deoplete#enable_smart_case = 1
+" let g:deoplete#enable_camel_case = 1
+" let g:deoplete#enable_refresh_always = 1
+" let g:deoplete#max_abbr_width = 0
+" let g:deoplete#max_menu_width = 0
+" let g:deoplete#omni#input_patterns = get(g:,'deoplete#omni#input_patterns',{})
+" call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
+" inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" :
+" \ <SID>check_back_space() ? "\<TAB>" :
+" \ deoplete#mappings#manual_complete()
+" function! s:check_back_space() abort "{{{
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~ '\s'
+" endfunction"}}}
+call deoplete#custom#var('ultisnips', 'matchers', ['matcher_fuzzy'])
+
 
 " Enconding
 " -----------------------------
@@ -383,8 +419,12 @@ let g:prettier#config#config_precedence = 'file-override'
 
 " vim-vue
 " -----------------------------
-au BufNewFile,BufRead *.vue set filetype=html
-let g:vue_disable_pre_processors=1
+" au BufNewFile,BufRead *.vue setlocal filetype=vue.html.javascript.css
+" let g:vim_vue_plugin_load_full_syntax = 1
+" let g:vim_vue_plugin_debug = 1
+" autocmd FileType vue syntax sync fromstart
+" let g:vue_disable_pre_processors=1
+
 
 
 " ultisnips
