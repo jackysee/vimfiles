@@ -426,7 +426,6 @@ let g:prettier#config#config_precedence = 'file-override'
 " let g:vue_disable_pre_processors=1
 
 
-
 " ultisnips
 " -----------------------------
 let g:UltiSnipsEditSplit="vertical"
