@@ -1,4 +1,4 @@
-" notes for windows the ~/_vimrc 
+" notes for windows the ~/_vimrc
 " need to :
 "   set rtp+=c:/[loc_of_vimfiles]
 "   source c:/[loc_of_vimfiles]el/vimrc
@@ -27,14 +27,14 @@ set clipboard=unnamed
 set splitbelow
 set splitright
 "set fileformats=unix
-set timeoutlen=1000
-set ttimeoutlen=0
-set lazyredraw
+" set timeoutlen=1000
+" set ttimeoutlen=0
+" set lazyredraw
 
 " Plugins
 " -----------------------------
 "
-
+"
 let s:path = expand('<sfile>:p:h')
 call plug#begin(s:path . '/plugged')
 "theme
@@ -42,6 +42,7 @@ Plug 'ajh17/spacegray.vim'
 "snip
 Plug 'SirVer/ultisnips'
 " Plug 'ajh17/VimCompletesMe'
+" Plug 'maralla/completor.vim'
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -53,7 +54,8 @@ endif
 Plug 'mattn/emmet-vim'
 Plug 'mbbill/undotree'
 " Plug 'tpope/vim-commentary'
-Plug 'tyru/caw.vim'
+" Plug 'tyru/caw.vim'
+Plug 'tomtom/tcomment_vim'
 Plug 'Shougo/context_filetype.vim'
 Plug 'terryma/vim-expand-region'
 Plug 'tpope/vim-repeat'
@@ -65,10 +67,11 @@ Plug 'Asheq/close-buffers.vim'
 Plug 'rhysd/clever-f.vim'
 Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
+" Plug 'gregsexton/MatchTag'
 
 " file finder
-Plug 'junegunn/fzf.vim'
-Plug 'kien/ctrlp.vim'
+" Plug 'junegunn/fzf.vim'
+" Plug 'kien/ctrlp.vim'
 " Plug 'Shougo/denite.nvim'
 " Plug 'Shougo/neomru.vim'
 
@@ -80,13 +83,14 @@ endif
 
 " js / vue
 " ------
-Plug 'w0rp/ale'
+Plug 'w0rp/ale', { 'for': ['javascript', 'vue', 'javascript.jsx']}
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html', 'vue'] }
-Plug 'elzr/vim-json'
+Plug 'elzr/vim-json', { 'for': ['json']}
 Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 'css', 'scss', 'markdown', 'vue', 'html', 'yaml'] }
-" Plug 'posva/vim-vue'
+Plug 'posva/vim-vue', { 'for': ['vue']}
 Plug 'sgur/vim-editorconfig'
-Plug 'gorodinskiy/vim-coloresque'
+" Plug 'gorodinskiy/vim-coloresque'
+Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
 Plug 'Raimondi/delimitMate'
 call plug#end()
 
@@ -103,8 +107,8 @@ else
   autocmd! bufwritepost vimrc source ~/.vimrc
 endif
 
-colors molokai 
-colorscheme molokai 
+colors molokai
+colorscheme molokai
 
 " if !has("gui_running")	" running term
 " endif
@@ -179,6 +183,9 @@ let g:mapleader=","
 " <C-L> turn off search highlight in sensible.vim
 nnoremap <leader>l :nohlsearch<CR>
 
+" keyword for search exclude period
+map <leader>k :set iskeyword=65-90,95,97-122,48-57<CR>
+
 "; :
 nnoremap ; :
 nnoremap > ;
@@ -241,7 +248,7 @@ call expand_region#custom_text_objects({
 " inoremap <silent> ,t <C-x><C-]>
 " inoremap <silent> ,u <C-x><C-u>
 
-" set omnifunc=syntaxcomplete#Complete
+set omnifunc=syntaxcomplete#Complete
 
 "VimCompletesMe
 " let g:vcm_default_map = 0
@@ -250,20 +257,22 @@ call expand_region#custom_text_objects({
 
 " deoplete
 " -----------------------------
-set completeopt=longest,menuone,preview
+" set completeopt=longest,menuone,preview
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources = {}
-let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips']
-inoremap <expr><C-g>     deoplete#undo_completion()
+call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
+
+" autocmd InsertEnter * call deoplete#enable()
+" let g:deoplete#sources = {}
+" let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips']
+" inoremap <expr><C-g>     deoplete#undo_completion()
 " let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips', 'ternjs']
-" let g:deoplete#enable_ignore_case = 1
-" let g:deoplete#enable_smart_case = 1
-" let g:deoplete#enable_camel_case = 1
-" let g:deoplete#enable_refresh_always = 1
-" let g:deoplete#max_abbr_width = 0
-" let g:deoplete#max_menu_width = 0
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#enable_camel_case = 1
+let g:deoplete#enable_refresh_always = 1
+let g:deoplete#max_abbr_width = 0
+let g:deoplete#max_menu_width = 0
 " let g:deoplete#omni#input_patterns = get(g:,'deoplete#omni#input_patterns',{})
-" call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
 " inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" :
 " \ <SID>check_back_space() ? "\<TAB>" :
 " \ deoplete#mappings#manual_complete()
@@ -271,7 +280,7 @@ inoremap <expr><C-g>     deoplete#undo_completion()
 "   let col = col('.') - 1
 "   return !col || getline('.')[col - 1]  =~ '\s'
 " endfunction"}}}
-call deoplete#custom#var('ultisnips', 'matchers', ['matcher_fuzzy'])
+" call deoplete#custom#var('ultisnips', 'matchers', ['matcher_fuzzy'])
 
 
 " Enconding
@@ -305,50 +314,56 @@ set list listchars=tab:»-,trail:·
 
 "" ctrlp
 " -----------------------------
-if executable('rg')
-  set grepprg=rg\ --color=never
-  let g:ctrlp_fallback_command = 'rg --files --color=never %s'
-else
-  if has('win32') || has('win64')
-    let g:ctrlp_fallback_command = 'dir %s /-n /b /s /a-d'  " Windows
-  else
-    let g:ctrlp_fallback_command = 'find %s -type f'        " MacOSX/Linux
-  endif
-endif
-
-let g:ctrlp_user_command = {
-	\ 'types': {
-		\ 1: ['.git', 'cd %s && git ls-tree -r --name-only HEAD'],
-		\ 2: ['.hg', 'hg --cwd %s locate -I .'],
-		\ },
-	\ 'fallback': g:ctrlp_fallback_command
-	\ }
-
-if has('win32') || has('win64')
-    nnoremap <C-P> :CtrlP<cr>
-else
-    "fzf is much faster in *nix
-    set rtp+=~/.fzf
-    nnoremap <C-P> :FZF<cr>
-endif
+" if executable('rg')
+"   set grepprg=rg\ --color=never
+"   let g:ctrlp_fallback_command = 'rg --files --color=never %s'
+" else
+"   if has('win32') || has('win64')
+"     let g:ctrlp_fallback_command = 'dir %s /-n /b /s /a-d'  " Windows
+"   else
+"     let g:ctrlp_fallback_command = 'find %s -type f'        " MacOSX/Linux
+"   endif
+" endif
+"
+" let g:ctrlp_user_command = {
+" 	\ 'types': {
+" 		\ 1: ['.git', 'cd %s && git ls-tree -r --name-only HEAD'],
+" 		\ 2: ['.hg', 'hg --cwd %s locate -I .'],
+" 		\ },
+" 	\ 'fallback': g:ctrlp_fallback_command
+" 	\ }
+"
+" if has('win32') || has('win64')
+"     nnoremap <C-P> :CtrlP<cr>
+" else
+"     "fzf is much faster in *nix
+"     set rtp+=~/.fzf
+"     nnoremap <C-P> :FZF<cr>
+" endif
 
 
 " denite
 " -----------------------------
+" call denite#custom#option('_', 'highlight_matched_char', 'Underline')
+" call denite#custom#option('_', 'highlight_preview_line', 'Underline')
+" call denite#custom#option('_', 'highlight_mode_insert', 'WildMenu')
+" call denite#custom#option('_', 'winheight', 15)
+" call denite#custom#source( 'file/rec', 'sorters', ['sorter/sublime'])
+" call denite#custom#source( 'file/rec/hg', 'sorters', ['sorter/sublime'])
+" call denite#custom#source( 'file/rec/git', 'sorters', ['sorter/sublime'])
 " call denite#custom#var('file/rec', 'command',
 " \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-
+"
 " call denite#custom#var('file/rec', 'command',
 "     \ ['rg', '--files', '--glob', '!.git'])
-
+"
 " call denite#custom#alias('source', 'file/rec/git', 'file/rec')
 " call denite#custom#var('file/rec/git', 'command',
 "     \ ['git', 'ls-tree', '-r' ,'--name-only', 'HEAD'])
-
+"
 " call denite#custom#alias('source', 'file/rec/hg', 'file/rec')
 " call denite#custom#var('file/rec/hg', 'command', ['hg', 'files'])
-
-
+"
 " function! DeniteFileRec()
 "     if finddir('.git', ';') != ''
 "         return 'file/rec/git'
@@ -357,33 +372,25 @@ endif
 "     else
 "         return 'file/rec'
 " endfunction
-
-" nnoremap <silent> <leader>d :<C-u>Denite `DeniteFileRec()` buffer file_mru<CR>
-
+"
+" nnoremap <silent> <leader>f :<C-u>Denite `DeniteFileRec()` buffer file_mru<CR>
+"
 " call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>', 'noremap')
 " call denite#custom#map('insert', '<C-k>', '<denite:move_to_previous_line>', 'noremap')
 
 " leaderF
-"
-" let g:Lf_ShortcutF = '<leader>.'
-"
-" nnoremap <leader>b :CtrlPBuffer<CR>
-" nnoremap <leader>r :CtrlPMRUFiles<CR>
+" --------------
 nnoremap <leader>r :LeaderfMru<CR>
+nnoremap <leader>g :Leaderf rg -e<Space>
 let g:Lf_WindowHeight = 0.30
 let g:Lf_MruFileExclude = ['*.so', '*.tmp', '*.bak', '*.exe', '*.dll']
 let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
-" nnoremap <space>f :LeaderfFunctionAll<cr>
-" nnoremap <space>b :LeaderfBufferAll<cr>
-" nnoremap <space>e :LeaderfFileFullScreen<cr>
-" nnoremap <space>m :LeaderfMru<cr>
-" nnoremap <space>l :LeaderfLineAll<cr>
 
 
 " search (fzf)
 " setting on windows :
-"   scoop install fzf 
-"   scoop install ripgrep 
+"   scoop install fzf
+"   scoop install ripgrep
 "   set FZF_DEFAULT_COMMAND='rg --files'
 " -----------------------------
 " if has('win32') || has('win64')
@@ -404,7 +411,7 @@ let g:sneak#streak=1
 " let g:ale_sign_error = 'x'
 " let g:ale_sign_warning = '!'
 " let g:ale_sign_style_error = 'x'
-" let g:ale_sign_style_warning = '!' 
+" let g:ale_sign_style_warning = '!'
 " highlight ALEErrorSign ctermbg=NONE ctermfg=red
 " highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
 let g:ale_lint_on_text_changed = 'normal'
@@ -423,7 +430,7 @@ let g:prettier#config#config_precedence = 'file-override'
 " let g:vim_vue_plugin_load_full_syntax = 1
 " let g:vim_vue_plugin_debug = 1
 " autocmd FileType vue syntax sync fromstart
-" let g:vue_disable_pre_processors=1
+let g:vue_disable_pre_processors=1
 
 
 " ultisnips
@@ -445,3 +452,11 @@ let g:UltiSnipsEditSplit="vertical"
 
 " ack
 " let g:ackprg = 'rg --vimgrep --no-heading'
+
+command! LightlineReload call LightlineReload()
+
+function! LightlineReload()
+  call lightline#init()
+  call lightline#colorscheme()
+  call lightline#update()
+endfunction
