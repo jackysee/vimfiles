@@ -90,6 +90,10 @@ Plug 'Asheq/close-buffers.vim'
 Plug 'rhysd/clever-f.vim'
 Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-function'
+Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript']}
+Plug 'Yggdroot/indentLine'
 " Plug 'gregsexton/MatchTag'
 Plug 'tpope/vim-fugitive'
 Plug 'kana/vim-textobj-user'
@@ -154,18 +158,20 @@ colorscheme seoul256
 " endif
 
 if has("gui_running")	" GUI
-  au GUIEnter * simalt ~x
+  " au GUIEnter * simalt ~x
   " set lines=50 columns=100
   set relativenumber
   " set guifont=Anonymous_Pro:h11
   " set guifont=Fira_Code_Medium:h10
   set guifont=Source_Code_Pro:h10
-  set background=dark
   set linespace=1
   " set t_Co=256          " 256 color mode
   set cursorline
   "highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
 endif
+
+
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
 "gui options
 set guioptions-=T
