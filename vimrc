@@ -37,21 +37,44 @@ set splitright
 "
 let s:path = expand('<sfile>:p:h')
 call plug#begin(s:path . '/plugged')
+
 "theme
 Plug 'ajh17/spacegray.vim'
+Plug 'whatyouhide/vim-gotham'
+Plug 'junegunn/seoul256.vim'
+Plug 'morhetz/gruvbox'
+Plug 'arcticicestudio/nord-vim'
+Plug 'lifepillar/vim-solarized8'
+
+"start page
+Plug 'mhinz/vim-startify'
+
 "snip
 Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
+
+" autocomplete
 " Plug 'ajh17/VimCompletesMe'
 " Plug 'maralla/completor.vim'
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"   Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
 
-Plug 'mattn/emmet-vim'
+" Plug 'Shougo/neco-syntax'
+" Plug 'ncm2/ncm2'
+" Plug 'roxma/vim-hug-neovim-rpc'
+" Plug 'roxma/nvim-yarp'
+" Plug 'ncm2/ncm2-bufword'
+" Plug 'ncm2/ncm2-path'
+" Plug 'ncm2/ncm2-syntax'
+" Plug 'fgrsnau/ncm-otherbuf'
+" Plug 'ncm2/ncm2-ultisnips'
+" Plug 'ncm2/ncm2-html-subscope'
+
 Plug 'mbbill/undotree'
 " Plug 'tpope/vim-commentary'
 " Plug 'tyru/caw.vim'
@@ -68,6 +91,10 @@ Plug 'rhysd/clever-f.vim'
 Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
 " Plug 'gregsexton/MatchTag'
+Plug 'tpope/vim-fugitive'
+Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-function'
+Plug 'thinca/vim-textobj-function'
 
 " file finder
 " Plug 'junegunn/fzf.vim'
@@ -84,6 +111,7 @@ endif
 " js / vue
 " ------
 Plug 'w0rp/ale', { 'for': ['javascript', 'vue', 'javascript.jsx']}
+Plug 'mattn/emmet-vim',  { 'for':['javascript', 'javascript.jsx', 'vue', 'html', 'css', 'scss', 'sass' ]}
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html', 'vue'] }
 Plug 'elzr/vim-json', { 'for': ['json']}
 Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 'css', 'scss', 'markdown', 'vue', 'html', 'yaml'] }
@@ -107,8 +135,20 @@ else
   autocmd! bufwritepost vimrc source ~/.vimrc
 endif
 
-colors molokai
-colorscheme molokai
+set termguicolors
+set background=dark
+
+" colorscheme molokai
+" colorscheme gotham
+
+let g:seoul256_background = 233
+colorscheme seoul256 
+
+" let g:gruvbox_contrast_dark='hard'
+" colorscheme gruvbox
+
+" colorscheme nord
+" colorscheme solarized8_high
 
 " if !has("gui_running")	" running term
 " endif
@@ -117,14 +157,13 @@ if has("gui_running")	" GUI
   au GUIEnter * simalt ~x
   " set lines=50 columns=100
   set relativenumber
-  set guifont=Anonymous_Pro:h11
-  "set guifont=Fira_Code_Medium:h10
+  " set guifont=Anonymous_Pro:h11
+  " set guifont=Fira_Code_Medium:h10
+  set guifont=Source_Code_Pro:h10
   set background=dark
   set linespace=1
-  set t_Co=256          " 256 color mode
+  " set t_Co=256          " 256 color mode
   set cursorline
-  colors molokai
-  colorscheme molokai
   "highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
 endif
 
@@ -171,6 +210,22 @@ function! HasPaste()
 endfunction
 
 "}
+
+function! s:list_commits()
+    let git = 'git -C ~/repo'
+    let commits = systemlist(git .' log --oneline | head -n10')
+    let git = 'G'. git[1:]
+    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
+endfunction
+
+"startify
+let g:startify_custom_header = ['']
+let g:startify_change_to_vcs_root = 1
+let g:startify_lists = [
+            \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
+            \ { 'header': ['   MRU'],            'type': 'files' },
+            \ { 'header': ['   Sessions'],       'type': 'sessions' }
+            \ ]
 
 
 " Shortcuts
@@ -227,7 +282,7 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
 " emmet
-imap ,e <C-y>,
+imap <leader>, <C-y>,
 
 " vim-expand-region
 " map K <Plug>(expand_region_expand)
@@ -248,7 +303,7 @@ call expand_region#custom_text_objects({
 " inoremap <silent> ,t <C-x><C-]>
 " inoremap <silent> ,u <C-x><C-u>
 
-set omnifunc=syntaxcomplete#Complete
+" set omnifunc=syntaxcomplete#Complete
 
 "VimCompletesMe
 " let g:vcm_default_map = 0
@@ -258,30 +313,27 @@ set omnifunc=syntaxcomplete#Complete
 " deoplete
 " -----------------------------
 " set completeopt=longest,menuone,preview
-let g:deoplete#enable_at_startup = 1
-call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
-
+" let g:deoplete#enable_at_startup = 0
 " autocmd InsertEnter * call deoplete#enable()
+" call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
+" call deoplete#custom#source('ultisnips', 'rank', 1000)
+
 " let g:deoplete#sources = {}
 " let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips']
 " inoremap <expr><C-g>     deoplete#undo_completion()
 " let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips', 'ternjs']
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#enable_camel_case = 1
-let g:deoplete#enable_refresh_always = 1
-let g:deoplete#max_abbr_width = 0
-let g:deoplete#max_menu_width = 0
-" let g:deoplete#omni#input_patterns = get(g:,'deoplete#omni#input_patterns',{})
-" inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" :
-" \ <SID>check_back_space() ? "\<TAB>" :
-" \ deoplete#mappings#manual_complete()
-" function! s:check_back_space() abort "{{{
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~ '\s'
-" endfunction"}}}
-" call deoplete#custom#var('ultisnips', 'matchers', ['matcher_fuzzy'])
+" let g:deoplete#enable_ignore_case = 1
+" let g:deoplete#enable_smart_case = 1
+" let g:deoplete#enable_camel_case = 1
+" let g:deoplete#enable_refresh_always = 1
+" let g:deoplete#max_abbr_width = 0
+" let g:deoplete#max_menu_width = 0
 
+" ncm2
+" -----------------------------
+" autocmd BufEnter * call ncm2#enable_for_buffer()
+" set completeopt=noinsert,menuone,noselect
+" set shortmess+=c
 
 " Enconding
 " -----------------------------
@@ -307,6 +359,14 @@ fun! Big5()
     set encoding=big5
     set fileencoding=big5
 endfun
+
+" open file
+" -----------------------------
+cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+map <leader>ew :e %%
+map <leader>es :sp %%
+map <leader>ev :evsp %%
+map <leader>et :tabe %%
 
 " whitespace
 " -----------------------------
@@ -432,6 +492,10 @@ let g:prettier#config#config_precedence = 'file-override'
 " autocmd FileType vue syntax sync fromstart
 let g:vue_disable_pre_processors=1
 
+" vim-json
+" -----------------------------
+let g:vim_json_syntax_conceal = 0
+
 
 " ultisnips
 " -----------------------------
@@ -452,6 +516,44 @@ let g:UltiSnipsEditSplit="vertical"
 
 " ack
 " let g:ackprg = 'rg --vimgrep --no-heading'
+
+
+"lightline
+let g:lightline = {
+            \ 'colorscheme': 'seoul256',
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+            \ },
+            \ 'component_function': {
+            \   'fugitive': 'LightlineFugitive',
+            \   'filename': 'LightlineFilename'
+            \ }
+            \ }
+let g:lightline.mode_map = {
+            \ 'n' : 'N',
+            \ 'i' : 'I',
+            \ 'v' : 'V'
+            \   }
+
+
+
+function! LightlineModified()
+    return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+function! LightlineReadonly()
+    return &ft !~? 'help' && &readonly ? 'RO' : ''
+endfunction
+function! LightlineFilename()
+    return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
+                \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
+                \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
+endfunction
+function! LightlineFugitive()
+    if &ft !~? 'vimfiler' && exists('*fugitive#head')
+        return fugitive#head()
+    endif
+    return ''
+endfunction
 
 command! LightlineReload call LightlineReload()
 
