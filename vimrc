@@ -90,15 +90,12 @@ Plug 'Asheq/close-buffers.vim'
 Plug 'rhysd/clever-f.vim'
 Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-function'
-Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript']}
 Plug 'Yggdroot/indentLine'
 " Plug 'gregsexton/MatchTag'
 Plug 'tpope/vim-fugitive'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
-Plug 'thinca/vim-textobj-function'
+Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript']}
 
 " file finder
 " Plug 'junegunn/fzf.vim'
