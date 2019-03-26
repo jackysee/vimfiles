@@ -59,6 +59,7 @@ Plug 'junegunn/seoul256.vim'
 Plug 'morhetz/gruvbox'
 Plug 'arcticicestudio/nord-vim'
 Plug 'lifepillar/vim-solarized8'
+Plug 'kaicataldo/material.vim'
 
 "start page
 Plug 'mhinz/vim-startify'
@@ -165,8 +166,11 @@ set background=dark
 " colorscheme molokai
 " colorscheme gotham
 
-let g:seoul256_background = 233
-colorscheme seoul256 
+let g:material_theme_style = 'dark'
+colorscheme material
+
+" let g:seoul256_background = 233
+" colorscheme seoul256 
 
 " let g:gruvbox_contrast_dark='hard'
 " colorscheme gruvbox
