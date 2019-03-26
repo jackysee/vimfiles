@@ -2,6 +2,21 @@
 " need to :
 "   set rtp+=c:/[loc_of_vimfiles]
 "   source c:/[loc_of_vimfiles]el/vimrc
+"
+" Constants
+" -----------------------------
+let s:is_windows = has('win32') || has('win64')
+
+" shell
+" -----------------------------
+if s:is_windows
+    " https://github.com/leonid-shevtsov/vimrun-silent
+    set shellcmdflag=/D/C
+endif
+if executable('zsh')
+    set shell=/usr/local/bin/zsh
+endif
+
 
 " Settings
 " -----------------------------
@@ -26,7 +41,7 @@ set smartcase
 set clipboard=unnamed
 set splitbelow
 set splitright
-"set fileformats=unix
+" set fileformats=unix,dos
 " set timeoutlen=1000
 " set ttimeoutlen=0
 " set lazyredraw
@@ -74,6 +89,19 @@ Plug 'SirVer/ultisnips'
 " Plug 'fgrsnau/ncm-otherbuf'
 " Plug 'ncm2/ncm2-ultisnips'
 " Plug 'ncm2/ncm2-html-subscope'
+" if s:is_windows
+"     Plug 'autozimu/LanguageClient-neovim', {
+"         \ 'branch': 'next',
+"         \ 'do': 'powershell -executionpolicy bypass -File install.ps1',
+"         \ }
+" else
+"     Plug 'autozimu/LanguageClient-neovim', {
+"         \ 'branch': 'next',
+"         \ 'do': 'bash install.sh',
+"         \ }
+" endif
+
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
 Plug 'mbbill/undotree'
 " Plug 'tpope/vim-commentary'
@@ -92,7 +120,8 @@ Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
 Plug 'Yggdroot/indentLine'
 " Plug 'gregsexton/MatchTag'
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive'
+Plug 'itchyny/vim-gitbranch'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript']}
@@ -103,7 +132,7 @@ Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript']}
 " Plug 'Shougo/denite.nvim'
 " Plug 'Shougo/neomru.vim'
 
-if has('win32') || has('win64')
+if s:is_windows
  Plug 'Yggdroot/LeaderF', { 'do': './install.bat' }
 else
  Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
@@ -123,14 +152,9 @@ Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
 Plug 'Raimondi/delimitMate'
 call plug#end()
 
-" set shell
-if executable('zsh')
-    set shell=/usr/local/bin/zsh
-endif
-
 
 " auto reload vimrc when editing it
-if has('win32') || has('win64')
+if s:is_windows
   autocmd! bufwritepost vimrc source ~/_vimrc
 else
   autocmd! bufwritepost vimrc source ~/.vimrc
@@ -155,7 +179,7 @@ colorscheme seoul256
 " endif
 
 if has("gui_running")	" GUI
-  " au GUIEnter * simalt ~x
+  au GUIEnter * simalt ~x
   " set lines=50 columns=100
   set relativenumber
   " set guifont=Anonymous_Pro:h11
@@ -332,10 +356,30 @@ call expand_region#custom_text_objects({
 " let g:deoplete#max_abbr_width = 0
 " let g:deoplete#max_menu_width = 0
 
-" ncm2
+" ncm2 + languageClient
 " -----------------------------
 " autocmd BufEnter * call ncm2#enable_for_buffer()
 " set completeopt=noinsert,menuone,noselect
+" set shortmess+=c
+" let g:LanguageClient_serverCommands = {
+"   \ 'javascript': ['javascript-typescript-stdio'],
+"   \ 'vue': ['vls'],
+"   \ }
+
+" coc
+" -----------------------------
+" let s:coc_extensions = [
+"             \   'coc-css',
+"             \   'coc-html',
+"             \   'coc-json',
+"             \   'coc-tsserver',
+"             \   'coc-vetur'
+"             \ ]
+"
+" if exists('*coc#add_extension')
+"   call call('coc#add_extension', s:coc_extensions)
+" endif
+" set hidden
 " set shortmess+=c
 
 " Enconding
@@ -381,7 +425,7 @@ set list listchars=tab:»-,trail:·
 "   set grepprg=rg\ --color=never
 "   let g:ctrlp_fallback_command = 'rg --files --color=never %s'
 " else
-"   if has('win32') || has('win64')
+"   if s:is_windows
 "     let g:ctrlp_fallback_command = 'dir %s /-n /b /s /a-d'  " Windows
 "   else
 "     let g:ctrlp_fallback_command = 'find %s -type f'        " MacOSX/Linux
@@ -396,7 +440,7 @@ set list listchars=tab:»-,trail:·
 " 	\ 'fallback': g:ctrlp_fallback_command
 " 	\ }
 "
-" if has('win32') || has('win64')
+" if s:is_windows
 "     nnoremap <C-P> :CtrlP<cr>
 " else
 "     "fzf is much faster in *nix
@@ -456,7 +500,7 @@ let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
 "   scoop install ripgrep
 "   set FZF_DEFAULT_COMMAND='rg --files'
 " -----------------------------
-" if has('win32') || has('win64')
+" if s:is_windows
 "     set rtp+=/c/Users/jackys/scoop/shims/fzf
 " else
 "     set rtp+=/usr/local/opt/fzf
@@ -525,10 +569,11 @@ let g:UltiSnipsEditSplit="vertical"
 let g:lightline = {
             \ 'colorscheme': 'seoul256',
             \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+            \   'left': [ [ 'mode', 'paste' ], [ 'coc', 'branch', 'filename' ] ]
             \ },
             \ 'component_function': {
-            \   'fugitive': 'LightlineFugitive',
+            \   'coc': 'coc#status',
+            \   'branch': 'LightlineGitBranch',
             \   'filename': 'LightlineFilename'
             \ }
             \ }
@@ -551,9 +596,9 @@ function! LightlineFilename()
                 \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
                 \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
 endfunction
-function! LightlineFugitive()
-    if &ft !~? 'vimfiler' && exists('*fugitive#head')
-        return fugitive#head()
+function! LightlineGitBranch()
+    if exists('*gitbranch#name')
+        return gitbranch#name()
     endif
     return ''
 endfunction
