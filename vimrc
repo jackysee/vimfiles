@@ -10,7 +10,6 @@ let s:is_windows = has('win32') || has('win64')
 " shell
 " -----------------------------
 if s:is_windows
-    " https://github.com/leonid-shevtsov/vimrun-silent
     set shellcmdflag=/D/C
 endif
 if executable('zsh')
@@ -101,7 +100,7 @@ Plug 'SirVer/ultisnips'
 "         \ }
 " endif
 
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
 Plug 'mbbill/undotree'
 " Plug 'tpope/vim-commentary'
@@ -118,7 +117,7 @@ Plug 'Asheq/close-buffers.vim'
 Plug 'rhysd/clever-f.vim'
 Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
-Plug 'Yggdroot/indentLine'
+" Plug 'Yggdroot/indentLine'
 " Plug 'gregsexton/MatchTag'
 " Plug 'tpope/vim-fugitive'
 Plug 'itchyny/vim-gitbranch'
@@ -192,7 +191,7 @@ if has("gui_running")	" GUI
 endif
 
 
-let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
 "gui options
 set guioptions-=T
@@ -311,6 +310,13 @@ nnoremap <C-H> <C-W><C-H>
 " emmet
 imap <leader>, <C-y>,
 
+" vimdiff
+if &diff
+    nnoremap <leader>1 :diffget LOCAL<cr>
+    nnoremap <leader>2 :diffget BASE<cr>
+    nnoremap <leader>3 :diffget REMOTE<cr>
+endif
+
 " vim-expand-region
 " map K <Plug>(expand_region_expand)
 " map J <Plug>(expand_region_shrink)
@@ -368,19 +374,19 @@ call expand_region#custom_text_objects({
 
 " coc
 " -----------------------------
-" let s:coc_extensions = [
-"             \   'coc-css',
-"             \   'coc-html',
-"             \   'coc-json',
-"             \   'coc-tsserver',
-"             \   'coc-vetur'
-"             \ ]
+let g:coc_global_extensions = [
+            \   'coc-css',
+            \   'coc-html',
+            \   'coc-json',
+            \   'coc-tsserver',
+            \   'coc-vetur'
+            \ ]
 "
 " if exists('*coc#add_extension')
 "   call call('coc#add_extension', s:coc_extensions)
 " endif
-" set hidden
-" set shortmess+=c
+set hidden
+set shortmess+=c
 
 " Enconding
 " -----------------------------
@@ -526,7 +532,13 @@ let g:ale_lint_on_text_changed = 'normal'
 
 " Prettier
 " -----------------------------
-let g:prettier#exec_cmd_path = 'src/frontend/node_modules/.bin/prettier'
+let s:prettierexec1 = 'src/frontend/node_modules/.bin/prettier'
+let s:prettierexec2 = 'web/node_modules/.bin/prettier'
+if filereadable(s:prettierexec1)
+    let g:prettier#exec_cmd_path = s:prettierexec1
+elseif filereadable(s:prettierexec2)
+    let g:prettier#exec_cmd_path = s:prettierexec2
+endif
 let g:prettier#autoformat = 0
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
 let g:prettier#config#config_precedence = 'file-override'
@@ -537,6 +549,7 @@ let g:prettier#config#config_precedence = 'file-override'
 " let g:vim_vue_plugin_load_full_syntax = 1
 " let g:vim_vue_plugin_debug = 1
 " autocmd FileType vue syntax sync fromstart
+autocmd FileType vue syntax sync fromstart
 let g:vue_disable_pre_processors=1
 
 " vim-json
