@@ -87,20 +87,20 @@ Plug 'SirVer/ultisnips'
 
 
 " == deoplete ==
-" Plug 'Shougo/neco-syntax'
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"   Plug 'Shougo/deoplete.nvim'
-"   Plug 'roxma/nvim-yarp'
-"   Plug 'roxma/vim-hug-neovim-rpc'
-" endif
+Plug 'Shougo/neco-syntax'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'carlitux/deoplete-ternjs'
 
 
 " Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
 " Plug 'lighttiger2505/deoplete-vim-lsp'
-" Plug 'carlitux/deoplete-ternjs'
 
 " == ncm ==
 " Plug 'Shougo/neco-syntax'
@@ -115,7 +115,7 @@ Plug 'SirVer/ultisnips'
 " Plug 'ncm2/ncm2-html-subscope'
 
 " == coc ==
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
 Plug 'mbbill/undotree'
 " Plug 'tpope/vim-commentary'
@@ -162,8 +162,8 @@ Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 
 Plug 'posva/vim-vue', { 'for': ['vue']}
 Plug 'sgur/vim-editorconfig'
 " Plug 'gorodinskiy/vim-coloresque'
-Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
-" Plug 'RRethy/vim-hexokinase', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
+" Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
+Plug 'RRethy/vim-hexokinase', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
 Plug 'Raimondi/delimitMate'
 call plug#end()
 
@@ -421,18 +421,25 @@ call expand_region#custom_text_objects({
 
 " deoplete
 " -----------------------------
-" set completeopt=longest,menuone,preview
-" let g:deoplete#enable_at_startup = 0
-" autocmd InsertEnter * call deoplete#enable()
-" inoremap <expr><C-g>     deoplete#undo_completion()
-" call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
-" call deoplete#custom#source('ultisnips', 'rank', 1000)
-" let g:deoplete#enable_ignore_case = 1
-" let g:deoplete#enable_smart_case = 1
-" let g:deoplete#enable_camel_case = 1
-" let g:deoplete#enable_refresh_always = 1
-" let g:deoplete#max_abbr_width = 0
-" let g:deoplete#max_menu_width = 0
+set completeopt=longest,menuone,preview
+let g:deoplete#enable_at_startup = 0
+autocmd InsertEnter * call deoplete#enable()
+inoremap <expr><C-g>     deoplete#undo_completion()
+call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
+call deoplete#custom#source('ultisnips', 'rank', 1000)
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#enable_camel_case = 1
+let g:deoplete#enable_refresh_always = 1
+let g:deoplete#max_abbr_width = 0
+let g:deoplete#max_menu_width = 0
+call deoplete#custom#var('around', {
+            \   'range_above': 15,
+            \   'range_below': 15,
+            \   'mark_above': '[↑]',
+            \   'mark_below': '[↓]',
+            \   'mark_changes': '[*]',
+            \})
 
 " ncm2
 " -----------------------------
@@ -444,16 +451,15 @@ call expand_region#custom_text_objects({
 
 " coc
 " -----------------------------
-let g:coc_global_extensions = [
-            \   'coc-css',
-            \   'coc-html',
-            \   'coc-json',
-            \   'coc-tsserver',
-            \   'coc-vetur'
-            \ ]
-
-set hidden
-set shortmess+=c
+" let g:coc_global_extensions = [
+"             \   'coc-css',
+"             \   'coc-html',
+"             \   'coc-json',
+"             \   'coc-tsserver',
+"             \   'coc-vetur'
+"             \ ]
+" set hidden
+" set shortmess+=c
 
 " Enconding
 " -----------------------------
@@ -659,7 +665,6 @@ let g:lightline = {
             \   'left': [ [ 'mode', 'paste' ], [ 'coc', 'branch', 'filename' ] ]
             \ },
             \ 'component_function': {
-            \   'coc': 'coc#status',
             \   'branch': 'LightlineGitBranch',
             \   'filename': 'LightlineFilename'
             \ }
