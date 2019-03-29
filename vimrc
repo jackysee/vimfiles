@@ -4,8 +4,6 @@
 "   source c:/[loc_of_vimfiles]el/vimrc
 
 
-
-
 " Constants
 " -----------------------------
 let s:is_windows = has('win32') || has('win64')
