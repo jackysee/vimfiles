@@ -69,16 +69,40 @@ Plug 'SirVer/ultisnips'
 " Plug 'honza/vim-snippets'
 
 " autocomplete
+" ==========================================
 " Plug 'ajh17/VimCompletesMe'
-" Plug 'maralla/completor.vim'
-" if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
-"   Plug 'Shougo/deoplete.nvim'
-"   Plug 'roxma/nvim-yarp'
-"   Plug 'roxma/vim-hug-neovim-rpc'
-" endif
+"
+" == LanguageClient_neovim ==
+if s:is_windows
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'powershell -executionpolicy bypass -File install.ps1',
+        \ }
+else
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh',
+        \ }
+endif
 
+
+" == deoplete ==
+Plug 'Shougo/neco-syntax'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+
+" Plug 'prabirshrestha/async.vim'
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'lighttiger2505/deoplete-vim-lsp'
+" Plug 'carlitux/deoplete-ternjs'
+
+" == ncm ==
 " Plug 'Shougo/neco-syntax'
 " Plug 'ncm2/ncm2'
 " Plug 'roxma/vim-hug-neovim-rpc'
@@ -89,18 +113,8 @@ Plug 'SirVer/ultisnips'
 " Plug 'fgrsnau/ncm-otherbuf'
 " Plug 'ncm2/ncm2-ultisnips'
 " Plug 'ncm2/ncm2-html-subscope'
-" if s:is_windows
-"     Plug 'autozimu/LanguageClient-neovim', {
-"         \ 'branch': 'next',
-"         \ 'do': 'powershell -executionpolicy bypass -File install.ps1',
-"         \ }
-" else
-"     Plug 'autozimu/LanguageClient-neovim', {
-"         \ 'branch': 'next',
-"         \ 'do': 'bash install.sh',
-"         \ }
-" endif
 
+" == coc ==
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
 Plug 'mbbill/undotree'
@@ -115,7 +129,7 @@ Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-surround'
 Plug 'itchyny/lightline.vim'
 Plug 'Asheq/close-buffers.vim'
-Plug 'rhysd/clever-f.vim'
+" Plug 'rhysd/clever-f.vim'
 Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
 " Plug 'Yggdroot/indentLine'
@@ -149,6 +163,7 @@ Plug 'posva/vim-vue', { 'for': ['vue']}
 Plug 'sgur/vim-editorconfig'
 " Plug 'gorodinskiy/vim-coloresque'
 Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
+" Plug 'RRethy/vim-hexokinase', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
 Plug 'Raimondi/delimitMate'
 call plug#end()
 
@@ -170,7 +185,7 @@ let g:material_theme_style = 'dark'
 colorscheme material
 
 " let g:seoul256_background = 233
-" colorscheme seoul256 
+" colorscheme seoul256
 
 " let g:gruvbox_contrast_dark='hard'
 " colorscheme gruvbox
@@ -291,16 +306,13 @@ noremap <left> :bp<CR>
 noremap <right> :bn<CR>
 
 " trim trailing space
-nnoremap <leader>s :call StripTrailingWhitespace()<cr>
-function! StripTrailingWhitespace()
-  if !&binary && &filetype != 'diff'
-    normal mz
-    normal Hmy
+function! <SID>StripTrailingWhitespaces()
+    let l = line(".")
+    let c = col(".")
     %s/\s\+$//e
-    normal 'yz<CR>'
-    normal `z
-  endif
-endfunction
+    call cursor(l, c)
+endfun
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 
 " undotree
 nnoremap <F5> :UndotreeToggle<cr>
@@ -347,18 +359,74 @@ call expand_region#custom_text_objects({
 " imap <C-j> <plug>vim_completes_me_forward
 " imap <C-k> <plug>vim_completes_me_backward
 
+" languageClient
+" -----------------------------
+" let g:LanguageClient_loggingFile = expand('/tmp/LanguageClient.log')
+" let g:LanguageClient_settingsPath = $HOMEPATH.'/vimfiles/lc_settings.json'
+" set hidden
+" let g:LanguageClient_serverCommands = {}
+" " npm install -g vscode-css-languageserver-bin
+" if executable('css-languageserver')
+"   let g:LanguageClient_serverCommands = extend(g:LanguageClient_serverCommands, {
+"   \ 'css': [&shell, &shellcmdflag, 'css-languageserver', '--stdio' ],
+"   \ 'scss': [&shell, &shellcmdflag, 'css-languageserver', '--stdio' ]
+"   \ })
+" endif
+" " npm install -g javascript-typescript-stdio
+" if executable('javascript-typescript-stdio')
+"   let g:LanguageClient_serverCommands = extend(g:LanguageClient_serverCommands, {
+"     \ 'javascript': [&shell, &shellcmdflag, 'javascript-typescript-stdio'],
+"     \ 'javascript.jsx': [&shell, &shellcmdflag, 'javascript-typescript-stdio'],
+"     \ })
+" endif
+" if executable('vls')
+"   let g:LanguageClient_serverCommands = extend(g:LanguageClient_serverCommands, {
+"     \ 'vue': [&shell, &shellcmdflag, 'vls']
+"     \ })
+" endif
+"
+"
+" vim-lsp
+" -----------------------------
+" let g:lsp_log_verbose = 1
+" let g:lsp_log_file = expand('~/vim-lsp.log')
+"
+" if executable('css-languageserver')
+" au User lsp_setup call lsp#register_server({
+"   \ 'name': 'css-languageserver',
+"   \ 'cmd': {server_info->[&shell, &shellcmdflag, 'css-languageserver', '--stdio']},
+"   \ 'whitelist': ['css', 'sass', 'scss', 'less'],
+"   \ })
+" endif
+" if executable('javascript-typescript-stdio')
+"   au User lsp_setup call lsp#register_server({
+"     \ 'name': 'javasscript typescript lanugage-server',
+"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'javascript-typescript-stdio']},
+"     \ 'whitelist': ['javascript', 'javascript.jsx'],
+"     \ })
+" endif
+" if executable('vls')
+"   au User lsp_setup call lsp#register_server({
+"     \ 'name': 'vue language server',
+"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'vls', '--stdio']},
+"     \ 'whitelist': ['vue'],
+"     \ 'config': { 'config': {} },
+"     \ })
+" endif
+
+" call deoplete#custom#option('profile', v:true)
+" call deoplete#enable_logging('DEBUG', 'deoplete.log')
+" call deoplete#custom#source('lsp', 'is_debug_enabled', 1)
+
+
 " deoplete
 " -----------------------------
 " set completeopt=longest,menuone,preview
 " let g:deoplete#enable_at_startup = 0
 " autocmd InsertEnter * call deoplete#enable()
+" inoremap <expr><C-g>     deoplete#undo_completion()
 " call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
 " call deoplete#custom#source('ultisnips', 'rank', 1000)
-
-" let g:deoplete#sources = {}
-" let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips']
-" inoremap <expr><C-g>     deoplete#undo_completion()
-" let g:deoplete#sources['javascript.jsx'] = ['file', 'ultisnips', 'ternjs']
 " let g:deoplete#enable_ignore_case = 1
 " let g:deoplete#enable_smart_case = 1
 " let g:deoplete#enable_camel_case = 1
@@ -366,15 +434,13 @@ call expand_region#custom_text_objects({
 " let g:deoplete#max_abbr_width = 0
 " let g:deoplete#max_menu_width = 0
 
-" ncm2 + languageClient
+" ncm2
 " -----------------------------
 " autocmd BufEnter * call ncm2#enable_for_buffer()
 " set completeopt=noinsert,menuone,noselect
 " set shortmess+=c
-" let g:LanguageClient_serverCommands = {
-"   \ 'javascript': ['javascript-typescript-stdio'],
-"   \ 'vue': ['vls'],
-"   \ }
+" set hidden
+
 
 " coc
 " -----------------------------
@@ -385,10 +451,7 @@ let g:coc_global_extensions = [
             \   'coc-tsserver',
             \   'coc-vetur'
             \ ]
-"
-" if exists('*coc#add_extension')
-"   call call('coc#add_extension', s:coc_extensions)
-" endif
+
 set hidden
 set shortmess+=c
 
@@ -520,11 +583,18 @@ let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
 " -----------------------------
 let g:sneak#s_next=1
 let g:sneak#streak=1
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 
 
 " ale
 " -----------------------------
 "let g:ale_sign_column_always = 1
+" let g:ale_sign_error = '●' " Less aggressive than the default '>>'
+let g:ale_sign_error = '💩'
+let g:ale_sign_warning = '⚠'
 " let g:ale_sign_error = 'x'
 " let g:ale_sign_warning = '!'
 " let g:ale_sign_style_error = 'x'
