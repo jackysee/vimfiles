@@ -155,6 +155,7 @@ endif
 " js / vue
 " ------
 Plug 'w0rp/ale', { 'for': ['javascript', 'vue', 'javascript.jsx']}
+Plug 'maximbaz/lightline-ale'
 Plug 'mattn/emmet-vim',  { 'for':['javascript', 'javascript.jsx', 'vue', 'html', 'css', 'scss', 'sass' ]}
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html', 'vue'] }
 Plug 'elzr/vim-json', { 'for': ['json']}
@@ -198,7 +199,6 @@ colorscheme material
 
 if has("gui_running")	" GUI
   au GUIEnter * simalt ~x
-  " set lines=50 columns=100
   set relativenumber
   " set guifont=Anonymous_Pro:h11
   " set guifont=Fira_Code_Medium:h10
@@ -211,8 +211,6 @@ endif
 
 let g:vimade = {}
 let g:vimade.fadelevel = 0.5
-
-" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
 "gui options
 set guioptions-=T
@@ -670,7 +668,14 @@ let g:UltiSnipsEditSplit="vertical"
 let g:lightline = {
             \ 'colorscheme': 'seoul256',
             \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ], [ 'coc', 'branch', 'filename' ] ]
+            \   'left': [ [ 'mode', 'paste' ], [ 'coc', 'branch', 'filename' ] ],
+            \   'right': [ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]]
+            \ },
+            \ 'component_expand': {
+            \  'linter_checking': 'lightline#ale#checking',
+            \  'linter_warnings': 'lightline#ale#warnings',
+            \  'linter_errors': 'lightline#ale#errors',
+            \  'linter_ok': 'lightline#ale#ok',
             \ },
             \ 'component_function': {
             \   'branch': 'LightlineGitBranch',
