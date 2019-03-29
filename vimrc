@@ -2,10 +2,14 @@
 " need to :
 "   set rtp+=c:/[loc_of_vimfiles]
 "   source c:/[loc_of_vimfiles]el/vimrc
-"
+
+
+
+
 " Constants
 " -----------------------------
 let s:is_windows = has('win32') || has('win64')
+
 
 " shell
 " -----------------------------
@@ -43,6 +47,7 @@ set splitright
 " set timeoutlen=1000
 " set ttimeoutlen=0
 " set lazyredraw
+
 
 " Plugins
 " -----------------------------
