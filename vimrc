@@ -139,6 +139,8 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript']}
+Plug 'qpkorr/vim-bufkill'
+Plug 'TaDaa/vimade'
 
 " file finder
 " Plug 'junegunn/fzf.vim'
@@ -209,6 +211,8 @@ if has("gui_running")	" GUI
   "highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
 endif
 
+let g:vimade = {}
+let g:vimade.fadelevel = 0.5
 
 " let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
@@ -279,6 +283,12 @@ let g:startify_lists = [
 let mapleader=","
 let g:mapleader=","
 
+
+" search selected text in visual mode
+vnoremap // y/<C-R>"<CR>
+
+" paste on visual mode without chaning original register
+vnoremap p "_dP
 
 " <C-L> turn off search highlight in sensible.vim
 nnoremap <leader>l :nohlsearch<CR>
