@@ -40,7 +40,6 @@ set smartcase
 set clipboard=unnamed
 set splitbelow
 set splitright
-" set fileformats=unix,dos
 " set timeoutlen=1000
 " set ttimeoutlen=0
 " set lazyredraw
