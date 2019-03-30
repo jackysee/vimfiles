@@ -42,6 +42,7 @@ set smartcase
 set clipboard=unnamed
 set splitbelow
 set splitright
+set hidden
 " set timeoutlen=1000
 " set ttimeoutlen=0
 " set lazyredraw
@@ -168,6 +169,7 @@ Plug 'sgur/vim-editorconfig'
 " Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
 Plug 'RRethy/vim-hexokinase', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
 Plug 'Raimondi/delimitMate'
+Plug '1995eaton/vim-better-javascript-completion'
 call plug#end()
 
 
@@ -416,9 +418,9 @@ call expand_region#custom_text_objects({
 " if executable('vls')
 "   au User lsp_setup call lsp#register_server({
 "     \ 'name': 'vue language server',
-"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'vls', '--stdio']},
+"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'vls --stdio']},
+"     \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'package.json'))},
 "     \ 'whitelist': ['vue'],
-"     \ 'config': { 'config': {} },
 "     \ })
 " endif
 
