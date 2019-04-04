@@ -149,7 +149,7 @@ Plug 'haya14busa/is.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
-Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript']}
+Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript', 'vue']}
 Plug 'qpkorr/vim-bufkill'
 Plug 'maximbaz/lightline-ale'
 if s:is_fast
@@ -182,7 +182,7 @@ if s:is_fast
     " Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
     Plug 'RRethy/vim-hexokinase', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
     Plug 'Raimondi/delimitMate'
-    Plug '1995eaton/vim-better-javascript-completion'
+    Plug '1995eaton/vim-better-javascript-completion',  { 'for': [ 'javascript', 'vue' ]}
 endif
 call plug#end()
 
