@@ -7,6 +7,7 @@
 " Constants
 " -----------------------------
 let s:is_windows = has('win32') || has('win64')
+let s:is_gui = has("gui_running")
 
 
 " shell
@@ -45,7 +46,8 @@ set splitright
 set hidden
 " set timeoutlen=1000
 " set ttimeoutlen=0
-" set lazyredraw
+set lazyredraw
+set regexpengine=1
 
 
 " Plugins
@@ -65,10 +67,15 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'kaicataldo/material.vim'
 
 "start page
-Plug 'mhinz/vim-startify'
+if s:is_gui
+    Plug 'mhinz/vim-startify'
+endif
 
 "snip
-Plug 'SirVer/ultisnips'
+if s:is_gui
+    Plug 'SirVer/ultisnips'
+endif
+
 " Plug 'honza/vim-snippets'
 
 " autocomplete
@@ -90,15 +97,17 @@ Plug 'SirVer/ultisnips'
 
 
 " == deoplete ==
-Plug 'Shougo/neco-syntax'
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+if s:is_gui
+    Plug 'Shougo/neco-syntax'
+    if has('nvim')
+      Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    else
+      Plug 'Shougo/deoplete.nvim'
+      Plug 'roxma/nvim-yarp'
+      Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+    Plug 'carlitux/deoplete-ternjs'
 endif
-Plug 'carlitux/deoplete-ternjs'
 
 
 " Plug 'prabirshrestha/async.vim'
@@ -141,7 +150,10 @@ Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript']}
 Plug 'qpkorr/vim-bufkill'
-Plug 'TaDaa/vimade'
+Plug 'maximbaz/lightline-ale'
+if s:is_gui
+    Plug 'TaDaa/vimade'
+endif
 
 " file finder
 " Plug 'junegunn/fzf.vim'
@@ -157,19 +169,20 @@ endif
 
 " js / vue
 " ------
-Plug 'w0rp/ale', { 'for': ['javascript', 'vue', 'javascript.jsx']}
-Plug 'maximbaz/lightline-ale'
-Plug 'mattn/emmet-vim',  { 'for':['javascript', 'javascript.jsx', 'vue', 'html', 'css', 'scss', 'sass' ]}
-Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html', 'vue'] }
-Plug 'elzr/vim-json', { 'for': ['json']}
-Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 'css', 'scss', 'markdown', 'vue', 'html', 'yaml'] }
-Plug 'posva/vim-vue', { 'for': ['vue']}
-Plug 'sgur/vim-editorconfig'
-" Plug 'gorodinskiy/vim-coloresque'
-" Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
-Plug 'RRethy/vim-hexokinase', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
-Plug 'Raimondi/delimitMate'
-Plug '1995eaton/vim-better-javascript-completion'
+if s:is_gui
+    Plug 'w0rp/ale', { 'for': ['javascript', 'vue', 'javascript.jsx']}
+    Plug 'mattn/emmet-vim',  { 'for':['javascript', 'javascript.jsx', 'vue', 'html', 'css', 'scss', 'sass' ]}
+    Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html', 'vue'] }
+    Plug 'elzr/vim-json', { 'for': ['json']}
+    Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 'css', 'scss', 'markdown', 'vue', 'html', 'yaml'] }
+    Plug 'posva/vim-vue', { 'for': ['vue']}
+    Plug 'sgur/vim-editorconfig'
+    " Plug 'gorodinskiy/vim-coloresque'
+    " Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
+    Plug 'RRethy/vim-hexokinase', { 'for': ['css', 'scss', 'sass', 'vue', 'html'] }
+    Plug 'Raimondi/delimitMate'
+    Plug '1995eaton/vim-better-javascript-completion'
+endif
 call plug#end()
 
 
@@ -431,25 +444,27 @@ call expand_region#custom_text_objects({
 
 " deoplete
 " -----------------------------
-set completeopt=longest,menuone,preview
-let g:deoplete#enable_at_startup = 0
-autocmd InsertEnter * call deoplete#enable()
-inoremap <expr><C-g>     deoplete#undo_completion()
-call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
-call deoplete#custom#source('ultisnips', 'rank', 1000)
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#enable_camel_case = 1
-let g:deoplete#enable_refresh_always = 1
-let g:deoplete#max_abbr_width = 0
-let g:deoplete#max_menu_width = 0
-call deoplete#custom#var('around', {
-            \   'range_above': 15,
-            \   'range_below': 15,
-            \   'mark_above': '[↑]',
-            \   'mark_below': '[↓]',
-            \   'mark_changes': '[*]',
-            \})
+if exists('g:deoplete#enable_at_startup')
+    set completeopt=longest,menuone,preview
+    let g:deoplete#enable_at_startup = 0
+    autocmd InsertEnter * call deoplete#enable()
+    inoremap <expr><C-g>     deoplete#undo_completion()
+    call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
+    call deoplete#custom#source('ultisnips', 'rank', 1000)
+    let g:deoplete#enable_ignore_case = 1
+    let g:deoplete#enable_smart_case = 1
+    let g:deoplete#enable_camel_case = 1
+    let g:deoplete#enable_refresh_always = 1
+    let g:deoplete#max_abbr_width = 0
+    let g:deoplete#max_menu_width = 0
+    call deoplete#custom#var('around', {
+                \   'range_above': 15,
+                \   'range_below': 15,
+                \   'mark_above': '[↑]',
+                \   'mark_below': '[↓]',
+                \   'mark_changes': '[*]',
+                \})
+endif
 
 " ncm2
 " -----------------------------
@@ -622,8 +637,8 @@ let g:ale_lint_on_text_changed = 'normal'
 
 " Prettier
 " -----------------------------
-let s:prettierexec1 = 'src/frontend/node_modules/.bin/prettier'
-let s:prettierexec2 = 'web/node_modules/.bin/prettier'
+let s:prettierexec1 = getcwd() . '/src/frontend/node_modules/.bin/prettier'
+let s:prettierexec2 = getcwd() . '/web/node_modules/.bin/prettier'
 if filereadable(s:prettierexec1)
     let g:prettier#exec_cmd_path = s:prettierexec1
 elseif filereadable(s:prettierexec2)
