@@ -8,6 +8,7 @@
 " -----------------------------
 let s:is_windows = has('win32') || has('win64')
 let s:is_gui = has("gui_running")
+let s:is_fast = !s:is_windows || (s:is_windows && s:is_gui)
 
 
 " shell
@@ -67,12 +68,12 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'kaicataldo/material.vim'
 
 "start page
-if s:is_gui
+if s:is_fast
     Plug 'mhinz/vim-startify'
 endif
 
 "snip
-if s:is_gui
+if s:is_fast
     Plug 'SirVer/ultisnips'
 endif
 
@@ -97,7 +98,7 @@ endif
 
 
 " == deoplete ==
-if s:is_gui
+if s:is_fast
     Plug 'Shougo/neco-syntax'
     if has('nvim')
       Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -151,7 +152,7 @@ Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript']}
 Plug 'qpkorr/vim-bufkill'
 Plug 'maximbaz/lightline-ale'
-if s:is_gui
+if s:is_fast
     Plug 'TaDaa/vimade'
 endif
 
@@ -169,7 +170,7 @@ endif
 
 " js / vue
 " ------
-if s:is_gui
+if s:is_fast
     Plug 'w0rp/ale', { 'for': ['javascript', 'vue', 'javascript.jsx']}
     Plug 'mattn/emmet-vim',  { 'for':['javascript', 'javascript.jsx', 'vue', 'html', 'css', 'scss', 'sass' ]}
     Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html', 'vue'] }
