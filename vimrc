@@ -689,7 +689,11 @@ let g:lightline = {
             \ 'colorscheme': 'seoul256',
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ], [ 'coc', 'branch', 'filename' ] ],
-            \   'right': [ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]]
+            \   'right': [
+            \       [ 'lineinfo' ],
+            \       [ 'percent' ],
+            \       [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]
+            \   ]
             \ },
             \ 'component_expand': {
             \   'linter_checking': 'lightline#ale#checking',
