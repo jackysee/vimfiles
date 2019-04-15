@@ -147,6 +147,7 @@ Plug 'haya14busa/is.vim'
 " Plug 'Yggdroot/indentLine'
 " Plug 'gregsexton/MatchTag'
 Plug 'itchyny/vim-gitbranch'
+Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript', 'vue']}
@@ -313,10 +314,11 @@ map <leader>k :set iskeyword=65-90,95,97-122,48-57<CR>
 "; :
 nnoremap ; :
 nnoremap > ;
+nnoremap < ,
 
 "space to page down
-nnoremap <SPACE> <PAGEDOWN>
-nnoremap <S-SPACE> <PAGEUP>
+" nnoremap <SPACE> <PAGEDOWN>
+" nnoremap <S-SPACE> <PAGEUP>
 
 " indent in visual model
 vnoremap < <gv
@@ -361,7 +363,11 @@ endif
 " map K <Plug>(expand_region_expand)
 " map J <Plug>(expand_region_shrink)
 call expand_region#custom_text_objects({
-            \ 'it':1
+            \ 'i]':1,
+            \ 'a]':1,
+            \ 'at':1,
+            \ 'ab':1,
+            \ 'aB':1
             \ })
 
 
@@ -615,10 +621,10 @@ let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
 " -----------------------------
 let g:sneak#s_next=1
 let g:sneak#streak=1
-map f <Plug>Sneak_f
-map F <Plug>Sneak_F
-map t <Plug>Sneak_t
-map T <Plug>Sneak_T
+" map f <Plug>Sneak_f
+" map F <Plug>Sneak_F
+" map t <Plug>Sneak_t
+" map T <Plug>Sneak_T
 
 
 " ale
@@ -706,12 +712,6 @@ let g:lightline = {
             \   'filename': 'LightlineFilename'
             \ }
             \ }
-let g:lightline.mode_map = {
-            \ 'n' : 'N',
-            \ 'i' : 'I',
-            \ 'v' : 'V'
-            \   }
-
 
 
 function! LightlineModified()
