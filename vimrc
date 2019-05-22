@@ -77,6 +77,9 @@ if s:is_fast
     Plug 'SirVer/ultisnips'
 endif
 
+"git
+Plug 'tpope/vim-fugitive'
+
 " Plug 'honza/vim-snippets'
 
 " autocomplete
@@ -172,11 +175,11 @@ endif
 " js / vue
 " ------
 if s:is_fast
-    Plug 'w0rp/ale', { 'for': ['javascript', 'vue', 'javascript.jsx']}
+    Plug 'w0rp/ale', { 'for': ['javascript', 'vue', 'javascript.jsx', 'css', 'scss', 'html', 'json' ]}
     Plug 'mattn/emmet-vim',  { 'for':['javascript', 'javascript.jsx', 'vue', 'html', 'css', 'scss', 'sass' ]}
     Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html', 'vue'] }
     Plug 'elzr/vim-json', { 'for': ['json']}
-    Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 'css', 'scss', 'markdown', 'vue', 'html', 'yaml'] }
+    " Plug 'prettier/vim-prettier', { 'branch': 'release/1.x', 'for': [ 'javascript', 'css', 'scss', 'markdown', 'vue', 'html', 'yaml'] }
     Plug 'posva/vim-vue', { 'for': ['vue']}
     Plug 'sgur/vim-editorconfig'
     " Plug 'gorodinskiy/vim-coloresque'
@@ -369,7 +372,8 @@ call expand_region#custom_text_objects({
             \ 'ab':1,
             \ 'aB':1
             \ })
-
+" ale fix
+nnoremap <leader>p <Plug>(ale_fix)
 
 " autocomplete
 " f: filenames, i:keywords, l:whole lines, n:keywords in current file,
@@ -627,11 +631,27 @@ let g:sneak#streak=1
 " map T <Plug>Sneak_T
 
 
+" Prettier
+" -----------------------------
+let s:prettierexec1 = getcwd() . '/src/frontend/node_modules/.bin/prettier'
+let s:prettierexec2 = getcwd() . '/web/node_modules/.bin/prettier'
+if filereadable(s:prettierexec1)
+    let s:prettierexec = s:prettierexec1
+elseif filereadable(s:prettierexec2)
+    let s:prettierexec = s:prettierexec2
+endif
+
+" let g:prettier#exec_cmd_path = s:prettierexec
+" let g:prettier#autoformat = 0
+" let g:prettier#quickfix_enabled = 0
+" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.vue,*.yaml,*.html PrettierAsync
+" let g:prettier#config#config_precedence = 'file-override'
+
 " ale
 " -----------------------------
 "let g:ale_sign_column_always = 1
 " let g:ale_sign_error = '●' " Less aggressive than the default '>>'
-let g:ale_sign_error = '💩'
+let g:ale_sign_error = '!'
 let g:ale_sign_warning = '⚠'
 " let g:ale_sign_error = 'x'
 " let g:ale_sign_warning = '!'
@@ -639,21 +659,27 @@ let g:ale_sign_warning = '⚠'
 " let g:ale_sign_style_warning = '!'
 " highlight ALEErrorSign ctermbg=NONE ctermfg=red
 " highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+
+if exists('s:prettierexec')
+    let g:ale_javascript_prettier_executable = s:prettierexec
+    let g:ale_css_prettier_executable = s:prettierexec
+    let g:ale_html_prettier_executable = s:prettierexec
+    let g:ale_json_prettier_executable = s:prettierexec
+    let g:ale_scss_prettier_executable = s:prettierexec
+    let g:ale_vue_prettier_executable = s:prettierexec
+endif
+let g:ale_fixers = {
+            \ 'javascript': ['prettier', 'eslint'],
+            \ 'vue': ['prettier', 'eslint'],
+            \ 'css': ['prettier'],
+            \ 'scss': ['prettier'],
+            \ 'html': ['prettier'],
+            \ 'json': ['prettier'],
+            \}
+let g:ale_fix_on_save = 1
 let g:ale_lint_on_text_changed = 'normal'
 
 
-" Prettier
-" -----------------------------
-let s:prettierexec1 = getcwd() . '/src/frontend/node_modules/.bin/prettier'
-let s:prettierexec2 = getcwd() . '/web/node_modules/.bin/prettier'
-if filereadable(s:prettierexec1)
-    let g:prettier#exec_cmd_path = s:prettierexec1
-elseif filereadable(s:prettierexec2)
-    let g:prettier#exec_cmd_path = s:prettierexec2
-endif
-let g:prettier#autoformat = 0
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html PrettierAsync
-let g:prettier#config#config_precedence = 'file-override'
 
 " vim-vue
 " -----------------------------
