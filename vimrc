@@ -45,8 +45,13 @@ set clipboard=unnamed
 set splitbelow
 set splitright
 set hidden
-" set timeoutlen=1000
-" set ttimeoutlen=0
+
+"more characters will be sent to the screen for redrawing
+set ttyfast
+"time waited for key press(es) to complete. It makes for a faster key response
+set ttimeout
+set ttimeoutlen=50
+
 set lazyredraw
 set regexpengine=1
 
@@ -79,6 +84,7 @@ endif
 
 "git
 Plug 'tpope/vim-fugitive'
+Plug 'jreybert/vimagit'
 
 " Plug 'honza/vim-snippets'
 
@@ -101,17 +107,17 @@ Plug 'tpope/vim-fugitive'
 
 
 " == deoplete ==
-if s:is_fast
-    Plug 'Shougo/neco-syntax'
-    if has('nvim')
-      Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    else
-      Plug 'Shougo/deoplete.nvim'
-      Plug 'roxma/nvim-yarp'
-      Plug 'roxma/vim-hug-neovim-rpc'
-    endif
-    Plug 'carlitux/deoplete-ternjs'
-endif
+" if s:is_fast
+"     Plug 'Shougo/neco-syntax'
+"     if has('nvim')
+"       Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"     else
+"       Plug 'Shougo/deoplete.nvim'
+"       Plug 'roxma/nvim-yarp'
+"       Plug 'roxma/vim-hug-neovim-rpc'
+"     endif
+"     Plug 'carlitux/deoplete-ternjs'
+" endif
 
 
 " Plug 'prabirshrestha/async.vim'
@@ -131,7 +137,7 @@ endif
 " Plug 'ncm2/ncm2-html-subscope'
 
 " == coc ==
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
 Plug 'mbbill/undotree'
 " Plug 'tpope/vim-commentary'
@@ -373,7 +379,10 @@ call expand_region#custom_text_objects({
             \ 'aB':1
             \ })
 " ale fix
-nnoremap <leader>p <Plug>(ale_fix)
+nnoremap <F8> <Plug>(ale_fix)
+
+"magit
+nnoremap <leader>gs :Magit<CR>
 
 " autocomplete
 " f: filenames, i:keywords, l:whole lines, n:keywords in current file,
@@ -455,27 +464,27 @@ nnoremap <leader>p <Plug>(ale_fix)
 
 " deoplete
 " -----------------------------
-if exists('g:deoplete#enable_at_startup')
-    set completeopt=longest,menuone,preview
-    let g:deoplete#enable_at_startup = 0
-    autocmd InsertEnter * call deoplete#enable()
-    inoremap <expr><C-g>     deoplete#undo_completion()
-    call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
-    call deoplete#custom#source('ultisnips', 'rank', 1000)
-    let g:deoplete#enable_ignore_case = 1
-    let g:deoplete#enable_smart_case = 1
-    let g:deoplete#enable_camel_case = 1
-    let g:deoplete#enable_refresh_always = 1
-    let g:deoplete#max_abbr_width = 0
-    let g:deoplete#max_menu_width = 0
-    call deoplete#custom#var('around', {
-                \   'range_above': 15,
-                \   'range_below': 15,
-                \   'mark_above': '[↑]',
-                \   'mark_below': '[↓]',
-                \   'mark_changes': '[*]',
-                \})
-endif
+" if exists('g:deoplete#enable_at_startup')
+"     set completeopt=longest,menuone,preview
+"     let g:deoplete#enable_at_startup = 0
+"     autocmd InsertEnter * call deoplete#enable()
+"     inoremap <expr><C-g>     deoplete#undo_completion()
+"     call deoplete#custom#source('ultisnips', 'matchers', ['matcher_fuzzy'])
+"     call deoplete#custom#source('ultisnips', 'rank', 1000)
+"     let g:deoplete#enable_ignore_case = 1
+"     let g:deoplete#enable_smart_case = 1
+"     let g:deoplete#enable_camel_case = 1
+"     let g:deoplete#enable_refresh_always = 1
+"     let g:deoplete#max_abbr_width = 0
+"     let g:deoplete#max_menu_width = 0
+"     call deoplete#custom#var('around', {
+"                 \   'range_above': 15,
+"                 \   'range_below': 15,
+"                 \   'mark_above': '[↑]',
+"                 \   'mark_below': '[↓]',
+"                 \   'mark_changes': '[*]',
+"                 \})
+" endif
 
 " ncm2
 " -----------------------------
@@ -487,15 +496,18 @@ endif
 
 " coc
 " -----------------------------
-" let g:coc_global_extensions = [
-"             \   'coc-css',
-"             \   'coc-html',
-"             \   'coc-json',
-"             \   'coc-tsserver',
-"             \   'coc-vetur'
-"             \ ]
-" set hidden
-" set shortmess+=c
+let g:coc_global_extensions = [
+            \   'coc-css',
+            \   'coc-html',
+            \   'coc-json',
+            \   'coc-tsserver',
+            \   'coc-vetur'
+            \ ]
+" set cmdheight=2
+set updatetime=300
+set hidden
+set shortmess+=c
+" set signcolumn=yes
 
 " Enconding
 " -----------------------------
@@ -676,8 +688,9 @@ let g:ale_fixers = {
             \ 'html': ['prettier'],
             \ 'json': ['prettier'],
             \}
+" let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_save = 0
 let g:ale_fix_on_save = 1
-let g:ale_lint_on_text_changed = 'normal'
 
 
 
