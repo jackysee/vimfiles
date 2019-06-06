@@ -17,7 +17,7 @@ if s:is_windows
     set shellcmdflag=/D/C
 endif
 if executable('zsh')
-    set shell=/usr/local/bin/zsh
+    set shell=/usr/bin/zsh
 endif
 
 
@@ -140,8 +140,6 @@ Plug 'jreybert/vimagit'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
 Plug 'mbbill/undotree'
-" Plug 'tpope/vim-commentary'
-" Plug 'tyru/caw.vim'
 Plug 'tomtom/tcomment_vim'
 Plug 'Shougo/context_filetype.vim'
 Plug 'terryma/vim-expand-region'
@@ -153,8 +151,6 @@ Plug 'itchyny/lightline.vim'
 Plug 'Asheq/close-buffers.vim'
 Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
-" Plug 'Yggdroot/indentLine'
-" Plug 'gregsexton/MatchTag'
 Plug 'itchyny/vim-gitbranch'
 Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-user'
@@ -162,7 +158,7 @@ Plug 'kana/vim-textobj-function'
 Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript', 'vue']}
 Plug 'qpkorr/vim-bufkill'
 Plug 'maximbaz/lightline-ale'
-if s:is_fast
+if s:is_gui
     Plug 'TaDaa/vimade'
 endif
 
@@ -225,7 +221,7 @@ colorscheme material
 " if !has("gui_running")	" running term
 " endif
 
-if has("gui_running")	" GUI
+if s:is_gui	" GUI
   au GUIEnter * simalt ~x
   set relativenumber
   " set guifont=Anonymous_Pro:h11
@@ -292,7 +288,7 @@ function! s:list_commits()
 endfunction
 
 "startify
-let g:startify_custom_header = ['']
+" let g:startify_custom_header = ['']
 let g:startify_change_to_vcs_root = 1
 let g:startify_lists = [
             \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
