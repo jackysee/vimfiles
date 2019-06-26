@@ -495,10 +495,11 @@ nnoremap <leader>gs :Magit<CR>
 let g:coc_global_extensions = [
             \   'coc-css',
             \   'coc-html',
-            \   'coc-json',
-            \   'coc-tsserver',
-            \   'coc-vetur'
+            \   'coc-json'
             \ ]
+            " \   'coc-tsserver',
+            " \   'coc-vetur'
+            " \ ]
 " set cmdheight=2
 set updatetime=300
 set hidden
@@ -615,6 +616,12 @@ nnoremap <leader>g :Leaderf rg -e<Space>
 let g:Lf_WindowHeight = 0.30
 let g:Lf_MruFileExclude = ['*.so', '*.tmp', '*.bak', '*.exe', '*.dll']
 let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
+
+if executable('ag')
+    " use ag over grep
+    set grepprg=ag\ --nogroup\ --nocolor
+endif
+
 
 
 " search (fzf)
