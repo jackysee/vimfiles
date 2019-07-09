@@ -10,7 +10,6 @@ let s:is_windows = has('win32') || has('win64')
 let s:is_gui = has("gui_running")
 let s:is_fast = !s:is_windows || (s:is_windows && s:is_gui)
 
-
 " shell
 " -----------------------------
 if s:is_windows
@@ -55,6 +54,12 @@ set ttimeoutlen=50
 set lazyredraw
 set regexpengine=1
 
+" set block cursor
+if $TERM == "xterm" || $TERM == "xterm-256color"
+    let &t_SI = "\<Esc>[6 q"
+    let &t_SR = "\<Esc>[4 q"
+    let &t_EI = "\<Esc>[2 q"
+endif
 
 " Plugins
 " -----------------------------
@@ -84,27 +89,9 @@ endif
 
 "git
 Plug 'tpope/vim-fugitive'
-Plug 'jreybert/vimagit'
 
-" Plug 'honza/vim-snippets'
-
-" autocomplete
-" ==========================================
-" Plug 'ajh17/VimCompletesMe'
-"
-" == LanguageClient_neovim ==
-" if s:is_windows
-"     Plug 'autozimu/LanguageClient-neovim', {
-"         \ 'branch': 'next',
-"         \ 'do': 'powershell -executionpolicy bypass -File install.ps1',
-"         \ }
-" else
-"     Plug 'autozimu/LanguageClient-neovim', {
-"         \ 'branch': 'next',
-"         \ 'do': 'bash install.sh',
-"         \ }
-" endif
-
+"hg
+Plug 'phleet/vim-mercenary'
 
 " == deoplete ==
 " if s:is_fast
@@ -124,18 +111,6 @@ Plug 'jreybert/vimagit'
 " Plug 'prabirshrestha/vim-lsp'
 " Plug 'lighttiger2505/deoplete-vim-lsp'
 
-" == ncm ==
-" Plug 'Shougo/neco-syntax'
-" Plug 'ncm2/ncm2'
-" Plug 'roxma/vim-hug-neovim-rpc'
-" Plug 'roxma/nvim-yarp'
-" Plug 'ncm2/ncm2-bufword'
-" Plug 'ncm2/ncm2-path'
-" Plug 'ncm2/ncm2-syntax'
-" Plug 'fgrsnau/ncm-otherbuf'
-" Plug 'ncm2/ncm2-ultisnips'
-" Plug 'ncm2/ncm2-html-subscope'
-
 " == coc ==
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 
@@ -148,16 +123,16 @@ Plug 'tpope/vim-sensible'
 Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-surround'
 Plug 'itchyny/lightline.vim'
+Plug 'maximbaz/lightline-ale'
 Plug 'Asheq/close-buffers.vim'
 Plug 'danro/rename.vim'
 Plug 'haya14busa/is.vim'
 Plug 'itchyny/vim-gitbranch'
 Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-function'
-Plug 'thinca/vim-textobj-function-javascript', { 'for': ['javascript', 'vue']}
 Plug 'qpkorr/vim-bufkill'
-Plug 'maximbaz/lightline-ale'
+" Plug 'rbong/vim-crystalline'
+Plug 'mileszs/ack.vim'
 if s:is_gui
     Plug 'TaDaa/vimade'
 endif
@@ -169,9 +144,9 @@ endif
 " Plug 'Shougo/neomru.vim'
 
 if s:is_windows
- Plug 'Yggdroot/LeaderF', { 'do': './install.bat' }
+    Plug 'Yggdroot/LeaderF', { 'do': './install.bat' }
 else
- Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+    Plug 'junegunn/fzf.vim'
 endif
 
 " js / vue
@@ -194,10 +169,11 @@ call plug#end()
 
 
 " auto reload vimrc when editing it
+
 if s:is_windows
-  autocmd! bufwritepost vimrc source ~/_vimrc
+    autocmd! bufwritepost vimrc source ~/_vimrc
 else
-  autocmd! bufwritepost vimrc source ~/.vimrc
+    autocmd! bufwritepost vimrc source ~/.vimrc
 endif
 
 set termguicolors
@@ -220,17 +196,27 @@ colorscheme material
 
 " if !has("gui_running")	" running term
 " endif
+"
+"
+highlight Visual guibg=grey
+if s:is_fast
+    set cursorline
+    " highlight CursorLine guibg=#303000 ctermbg=24 gui=none cterm=none
+    highlight CursorLine guibg=black
+    autocmd WinEnter * setlocal cursorline
+    autocmd WinLeave * setlocal nocursorline
+endif
 
 if s:is_gui	" GUI
-  au GUIEnter * simalt ~x
-  set relativenumber
-  " set guifont=Anonymous_Pro:h11
-  " set guifont=Fira_Code_Medium:h10
-  set guifont=Source_Code_Pro:h10
-  set linespace=1
-  " set t_Co=256          " 256 color mode
-  set cursorline
-  "highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
+    au GUIEnter * simalt ~x
+    set relativenumber
+    " set guifont=Anonymous_Pro:h11
+    " set guifont=Fira_Code_Medium:h10
+    set guifont=Source_Code_Pro:h10
+    set linespace=1
+    " set t_Co=256          " 256 color mode
+    " set cursorline
+    "highlight CursorLine guibg=#003844 ctermbg=24  gui=none cterm=none
 endif
 
 let g:vimade = {}
@@ -264,6 +250,11 @@ set noshowmode
 " set statusline+=\ \ \ [%{&ff}/%Y]
 " set statusline+=\ \ \ %<%20.30(%{hostname()}:%{CurDir()}%)\
 " set statusline+=%=%-10.(%l,%c%V%)\ %p%%/%L
+
+set path+=src/main/java,src/main/test,src/frontend/src
+set inex=substitute(v:fname,'/','src/frontend/src/','')
+set suffixesadd=.js,.vue,.scss
+
 
 function! CurDir()
     let curdir = substitute(getcwd(), $HOME, "~", "")
@@ -375,87 +366,9 @@ call expand_region#custom_text_objects({
             \ 'aB':1
             \ })
 " ale fix
-nnoremap <F8> <Plug>(ale_fix)
-
-"magit
-nnoremap <leader>gs :Magit<CR>
-
-" autocomplete
-" f: filenames, i:keywords, l:whole lines, n:keywords in current file,
-" o:omnicompletion, ]:tags, u:user
-" inoremap <silent> ,f <C-x><C-f>
-" inoremap <silent> ,i <C-x><C-i>
-" inoremap <silent> ,l <C-x><C-l>
-" inoremap <silent> ,n <C-x><C-n>
-" inoremap <silent> ,o <C-x><C-o>
-" inoremap <silent> ,t <C-x><C-]>
-" inoremap <silent> ,u <C-x><C-u>
-
-" set omnifunc=syntaxcomplete#Complete
-
-"VimCompletesMe
-" let g:vcm_default_map = 0
-" imap <C-j> <plug>vim_completes_me_forward
-" imap <C-k> <plug>vim_completes_me_backward
-
-" languageClient
-" -----------------------------
-" let g:LanguageClient_loggingFile = expand('/tmp/LanguageClient.log')
-" let g:LanguageClient_settingsPath = $HOMEPATH.'/vimfiles/lc_settings.json'
-" set hidden
-" let g:LanguageClient_serverCommands = {}
-" " npm install -g vscode-css-languageserver-bin
-" if executable('css-languageserver')
-"   let g:LanguageClient_serverCommands = extend(g:LanguageClient_serverCommands, {
-"   \ 'css': [&shell, &shellcmdflag, 'css-languageserver', '--stdio' ],
-"   \ 'scss': [&shell, &shellcmdflag, 'css-languageserver', '--stdio' ]
-"   \ })
-" endif
-" " npm install -g javascript-typescript-stdio
-" if executable('javascript-typescript-stdio')
-"   let g:LanguageClient_serverCommands = extend(g:LanguageClient_serverCommands, {
-"     \ 'javascript': [&shell, &shellcmdflag, 'javascript-typescript-stdio'],
-"     \ 'javascript.jsx': [&shell, &shellcmdflag, 'javascript-typescript-stdio'],
-"     \ })
-" endif
-" if executable('vls')
-"   let g:LanguageClient_serverCommands = extend(g:LanguageClient_serverCommands, {
-"     \ 'vue': [&shell, &shellcmdflag, 'vls']
-"     \ })
-" endif
-"
-"
-" vim-lsp
-" -----------------------------
-" let g:lsp_log_verbose = 1
-" let g:lsp_log_file = expand('~/vim-lsp.log')
-"
-" if executable('css-languageserver')
-" au User lsp_setup call lsp#register_server({
-"   \ 'name': 'css-languageserver',
-"   \ 'cmd': {server_info->[&shell, &shellcmdflag, 'css-languageserver', '--stdio']},
-"   \ 'whitelist': ['css', 'sass', 'scss', 'less'],
-"   \ })
-" endif
-" if executable('javascript-typescript-stdio')
-"   au User lsp_setup call lsp#register_server({
-"     \ 'name': 'javasscript typescript lanugage-server',
-"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'javascript-typescript-stdio']},
-"     \ 'whitelist': ['javascript', 'javascript.jsx'],
-"     \ })
-" endif
-" if executable('vls')
-"   au User lsp_setup call lsp#register_server({
-"     \ 'name': 'vue language server',
-"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'vls --stdio']},
-"     \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'package.json'))},
-"     \ 'whitelist': ['vue'],
-"     \ })
-" endif
-
-" call deoplete#custom#option('profile', v:true)
-" call deoplete#enable_logging('DEBUG', 'deoplete.log')
-" call deoplete#custom#source('lsp', 'is_debug_enabled', 1)
+nmap <silent> <leader>af <Plug>(ale_fix)
+nmap <silent> <leader>aj :ALENext<cr>
+nmap <silent> <leader>ak :ALEPrevious<cr>
 
 
 " deoplete
@@ -482,20 +395,13 @@ nnoremap <leader>gs :Magit<CR>
 "                 \})
 " endif
 
-" ncm2
-" -----------------------------
-" autocmd BufEnter * call ncm2#enable_for_buffer()
-" set completeopt=noinsert,menuone,noselect
-" set shortmess+=c
-" set hidden
-
-
 " coc
 " -----------------------------
 let g:coc_global_extensions = [
             \   'coc-css',
             \   'coc-html',
-            \   'coc-json'
+            \   'coc-json',
+            \   'coc-java'
             \ ]
             " \   'coc-tsserver',
             " \   'coc-vetur'
@@ -505,6 +411,15 @@ set updatetime=300
 set hidden
 set shortmess+=c
 " set signcolumn=yes
+" remap goto
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Remap for do codeAction of current line
+nmap <leader>ca  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
 
 " Enconding
 " -----------------------------
@@ -611,15 +526,24 @@ set list listchars=tab:»-,trail:·
 
 " leaderF
 " --------------
-nnoremap <leader>r :LeaderfMru<CR>
-nnoremap <leader>g :Leaderf rg -e<Space>
-let g:Lf_WindowHeight = 0.30
-let g:Lf_MruFileExclude = ['*.so', '*.tmp', '*.bak', '*.exe', '*.dll']
-let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
+if s:is_windows
+    nnoremap <leader>r :LeaderfMru<CR>
+    nnoremap <leader>g :Leaderf rg -e<Space>
+    let g:Lf_WindowHeight = 0.30
+    let g:Lf_MruFileExclude = ['*.so', '*.tmp', '*.bak', '*.exe', '*.dll']
+    let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
+else
+    let $FZF_DEFAULT_OPTS = ' --reverse'
+    let g:fzf_layout = { 'down': '~30%' }
+    nnoremap <leader>f :Files<cr>
+    nnoremap <leader>r :History<cr>
+    nnoremap <leader>b :Buffers<cr>
+endif
 
+
+"ack.vim
 if executable('ag')
-    " use ag over grep
-    set grepprg=ag\ --nogroup\ --nocolor
+  let g:ackprg = 'ag --vimgrep'
 endif
 
 
@@ -640,27 +564,10 @@ endif
 " -----------------------------
 let g:sneak#s_next=1
 let g:sneak#streak=1
-" map f <Plug>Sneak_f
-" map F <Plug>Sneak_F
-" map t <Plug>Sneak_t
-" map T <Plug>Sneak_T
-
-
-" Prettier
-" -----------------------------
-let s:prettierexec1 = getcwd() . '/src/frontend/node_modules/.bin/prettier'
-let s:prettierexec2 = getcwd() . '/web/node_modules/.bin/prettier'
-if filereadable(s:prettierexec1)
-    let s:prettierexec = s:prettierexec1
-elseif filereadable(s:prettierexec2)
-    let s:prettierexec = s:prettierexec2
-endif
-
-" let g:prettier#exec_cmd_path = s:prettierexec
-" let g:prettier#autoformat = 0
-" let g:prettier#quickfix_enabled = 0
-" autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.vue,*.yaml,*.html PrettierAsync
-" let g:prettier#config#config_precedence = 'file-override'
+map f <Plug>Sneak_f
+map F <Plug>Sneak_F
+map t <Plug>Sneak_t
+map T <Plug>Sneak_T
 
 " ale
 " -----------------------------
@@ -691,8 +598,8 @@ let g:ale_fixers = {
             \ 'html': ['prettier'],
             \ 'json': ['prettier'],
             \}
-" let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_save = 0
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 1
 
 
@@ -717,20 +624,6 @@ let g:UltiSnipsEditSplit="vertical"
 "let g:UltiSnipsExpandTrigger="<c-e>"
 "let g:UltiSnipsJumpForwardTrigger="<c-b>"
 "let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-" " quick-scope
-" " -----------------------------
-" let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-" let g:qs_lazy_highlight = 1
-" augroup qs_colors
-"   autocmd!
-"   autocmd ColorScheme * highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
-"   autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
-" augroup END
-
-" ack
-" let g:ackprg = 'rg --vimgrep --no-heading'
-
 
 "lightline
 let g:lightline = {
@@ -781,3 +674,15 @@ function! LightlineReload()
   call lightline#colorscheme()
   call lightline#update()
 endfunction
+
+
+" crystaline
+" function! StatusLine(...)
+"   return crystalline#mode() . crystalline#right_mode_sep('>')
+"         \ . '%t%h%w%m%r %{fugitive#head()}' . crystalline#right_sep('', 'Fill') . '%='
+"         \ . crystalline#left_sep('', 'Fill') . ' %{&ft} %l/%L %c%V %P '
+" endfunction
+" let g:crystalline_enable_sep = 1
+" let g:crystalline_statusline_fn = 'StatusLine'
+" let g:crystalline_theme = 'default'
+" set laststatus=2
