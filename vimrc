@@ -1,4 +1,5 @@
 " notes for windows the ~/_vimrc
+"
 " need to :
 "   set rtp+=c:/[loc_of_vimfiles]
 "   source c:/[loc_of_vimfiles]el/vimrc
@@ -44,6 +45,7 @@ set clipboard=unnamed
 set splitbelow
 set splitright
 set hidden
+set mouse=a
 
 "more characters will be sent to the screen for redrawing
 set ttyfast
@@ -74,8 +76,21 @@ Plug 'whatyouhide/vim-gotham'
 Plug 'junegunn/seoul256.vim'
 Plug 'morhetz/gruvbox'
 Plug 'arcticicestudio/nord-vim'
+" Plug 'fxn/vim-monochrome'
+" Plug 'CallumHoward/vim-neodark'
+" Plug 'owickstrom/vim-colors-paramount'
+" Plug 'Badacadabra/vim-archery'
+Plug 'xero/blaquemagick.vim'
+Plug 'Lokaltog/vim-monotone'
+Plug 'axvr/photon.vim'
+Plug 't184256/vim-boring'
+Plug 'KKPMW/distilled-vim'
+Plug 'zaki/zazen'
 Plug 'lifepillar/vim-solarized8'
 Plug 'kaicataldo/material.vim'
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'sonph/onehalf', { 'rtp': 'vim' }
+
 
 "start page
 if s:is_fast
@@ -89,9 +104,11 @@ endif
 
 "git
 Plug 'tpope/vim-fugitive'
+Plug 'mhinz/vim-signify'
 
 "hg
-Plug 'phleet/vim-mercenary'
+Plug 'jlfwong/vim-mercenary'
+" Plug 'ludovicchabant/vim-lawrencium'
 
 " == deoplete ==
 " if s:is_fast
@@ -131,11 +148,11 @@ Plug 'itchyny/vim-gitbranch'
 Plug 'wellle/targets.vim'
 Plug 'kana/vim-textobj-user'
 Plug 'qpkorr/vim-bufkill'
-" Plug 'rbong/vim-crystalline'
 Plug 'mileszs/ack.vim'
 if s:is_gui
     Plug 'TaDaa/vimade'
 endif
+Plug 'christoomey/vim-tmux-navigator'
 
 " file finder
 " Plug 'junegunn/fzf.vim'
@@ -182,8 +199,20 @@ set background=dark
 " colorscheme molokai
 " colorscheme gotham
 
-let g:material_theme_style = 'dark'
-colorscheme material
+" let g:material_theme_style = 'dark'
+" colorscheme material
+
+" colorscheme monochrome
+" colorscheme paramount
+" colorscheme neodark
+" colorscheme archery
+" colorscheme blaquemagick
+" colorscheme monotone
+" colorscheme photon
+" colorscheme boring
+" colorscheme distilled
+" colorscheme zazen
+colorscheme onehalfdark
 
 " let g:seoul256_background = 233
 " colorscheme seoul256
@@ -198,13 +227,20 @@ colorscheme material
 " endif
 "
 "
-highlight Visual guibg=grey
+highlight Visual guibg=grey guifg=black
 if s:is_fast
     set cursorline
+    " highlight CursorLine gui=underline cterm=underline
     " highlight CursorLine guibg=#303000 ctermbg=24 gui=none cterm=none
-    highlight CursorLine guibg=black
+    " highlight CursorLine guibg=black guifg=NONE
+    highlight CursorLine guibg=gray9
     autocmd WinEnter * setlocal cursorline
     autocmd WinLeave * setlocal nocursorline
+endif
+
+if has('unix')
+    set guifont=Source_Code_Pro:h10,DejaVu_Sans_Mono:h10,Menlo:h10
+    " set guifont=Fira_Code:h10,Source_Code_Pro:h10,DejaVu_Sans_Mono:h10,Menlo:h10
 endif
 
 if s:is_gui	" GUI
@@ -287,6 +323,10 @@ let g:startify_lists = [
             \ { 'header': ['   Sessions'],       'type': 'sessions' }
             \ ]
 
+" hg/git gutter
+let g:signify_realtime = 0
+let g:signify_sign_change = '~'
+let g:signify_update_on_focusgained = 1
 
 " Shortcuts
 " -----------------------------
@@ -352,7 +392,7 @@ imap <leader>, <C-y>,
 if &diff
     nnoremap <leader>1 :diffget LOCAL<cr>
     nnoremap <leader>2 :diffget BASE<cr>
-    nnoremap <leader>3 :diffget REMOTE<cr>
+    cnoremap <leader>3 :diffget REMOTE<cr>
 endif
 
 " vim-expand-region
@@ -401,9 +441,12 @@ let g:coc_global_extensions = [
             \   'coc-css',
             \   'coc-html',
             \   'coc-json',
-            \   'coc-java'
+            \   'coc-java',
+            \   'coc-prettier',
+            \   'coc-pairs'
             \ ]
             " \   'coc-tsserver',
+            " \   'coc-eslint'
             " \   'coc-vetur'
             " \ ]
 " set cmdheight=2
@@ -420,6 +463,10 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <leader>ca  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+" autocmd InsertLeave *.js,*.vue CocCommand prettier.formatFile
 
 " Enconding
 " -----------------------------
@@ -533,17 +580,33 @@ if s:is_windows
     let g:Lf_MruFileExclude = ['*.so', '*.tmp', '*.bak', '*.exe', '*.dll']
     let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
 else
+    function! s:build_quickfix_list(lines)
+      call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+      copen
+      cc
+    endfunction
     let $FZF_DEFAULT_OPTS = ' --reverse'
     let g:fzf_layout = { 'down': '~30%' }
+    let g:fzf_colors =
+                \ { 'fg': ['fg', 'Normal'],
+                \ 'bg': ['bg', 'Normal']}
+    let g:fzf_action = {
+        \ 'ctrl-q': function('s:build_quickfix_list'),
+        \ 'ctrl-t': 'tab split',
+        \ 'ctrl-x': 'split',
+        \ 'ctrl-v': 'vsplit'
+        \ }
     nnoremap <leader>f :Files<cr>
     nnoremap <leader>r :History<cr>
     nnoremap <leader>b :Buffers<cr>
+    let g:fzf_files_options =
+        \ '--preview "(bat {}) 2> /dev/null | head -'.&lines.'"'
 endif
 
 
 "ack.vim
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+    let g:ackprg = 'ag --vimgrep'
 endif
 
 
@@ -572,32 +635,61 @@ map T <Plug>Sneak_T
 " ale
 " -----------------------------
 "let g:ale_sign_column_always = 1
-" let g:ale_sign_error = '●' " Less aggressive than the default '>>'
-let g:ale_sign_error = '!'
+""
+" let g:ale_sign_error = "◉"
+" let g:ale_sign_warning = "◉"
+let g:ale_sign_error = '✗'
 let g:ale_sign_warning = '⚠'
-" let g:ale_sign_error = 'x'
-" let g:ale_sign_warning = '!'
-" let g:ale_sign_style_error = 'x'
-" let g:ale_sign_style_warning = '!'
-" highlight ALEErrorSign ctermbg=NONE ctermfg=red
-" highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+highlight ALEErrorSign guifg=#C30500
+highlight ALEWarningSign guifg=#ED6237
 
-if exists('s:prettierexec')
-    let g:ale_javascript_prettier_executable = s:prettierexec
-    let g:ale_css_prettier_executable = s:prettierexec
-    let g:ale_html_prettier_executable = s:prettierexec
-    let g:ale_json_prettier_executable = s:prettierexec
-    let g:ale_scss_prettier_executable = s:prettierexec
-    let g:ale_vue_prettier_executable = s:prettierexec
+" highlight clear ALEErrorLine "Sign
+" highlight clear ALEWarningLine "Sign
+" let g:ale_sign_error = '✗'
+" let g:ale_sign_warning = '⚠'
+
+" let g:ale_sign_error = '●'
+
+" let s:prettierexec1 = getcwd() . '/src/frontend/node_modules/.bin/prettier'
+" let s:prettierexec2 = getcwd() . '/web/node_modules/.bin/prettier'
+" if filereadable(s:prettierexec1)
+"     let s:prettierexec = s:prettierexec1
+" elseif filereadable(s:prettierexec2)
+"     let s:prettierexec = s:prettierexec2
+" endif
+"
+" if exists('s:prettierexec')
+"     let g:ale_javascript_prettier_executable = s:prettierexec
+"     let g:ale_css_prettier_executable = s:prettierexec
+"     let g:ale_html_prettier_executable = s:prettierexec
+"     let g:ale_json_prettier_executable = s:prettierexec
+"     let g:ale_scss_prettier_executable = s:prettierexec
+"     let g:ale_vue_prettier_executable = s:prettierexec
+" endif
+
+let s:eslintexec1 = getcwd() . '/src/frontend/.eslintrc.js'
+let s:eslintexec2 = getcwd() . '/web/.eslintrc.js'
+if filereadable(s:eslintexec1)
+    let s:eslintdir = getcwd() . '/src/frontend'
+elseif filereadable(s:eslintexec2)
+    let s:eslintdir = getcwd() . '/web'
+else
+    let s:eslintdir = getcwd()
 endif
+let g:ale_javascript_eslint_options = '--resolve-plugins-relative-to ' . s:eslintdir
 let g:ale_fixers = {
-            \ 'javascript': ['prettier', 'eslint'],
-            \ 'vue': ['prettier', 'eslint'],
-            \ 'css': ['prettier'],
-            \ 'scss': ['prettier'],
-            \ 'html': ['prettier'],
-            \ 'json': ['prettier'],
+            \ 'javascript': ['eslint'],
+            \ 'vue': ['eslint']
             \}
+
+" let g:ale_fixers = {
+"             \ 'javascript': ['prettier', 'eslint'],
+"             \ 'vue': ['prettier', 'eslint'],
+"             \ 'css': ['prettier'],
+"             \ 'scss': ['prettier'],
+"             \ 'html': ['prettier'],
+"             \ 'json': ['prettier'],
+"             \}
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_save = 1
 let g:ale_fix_on_save = 1
@@ -606,6 +698,7 @@ let g:ale_fix_on_save = 1
 
 " vim-vue
 " -----------------------------
+au BufNewFile,BufRead *.vue setlocal filetype=vue
 " au BufNewFile,BufRead *.vue setlocal filetype=vue.html.javascript.css
 " let g:vim_vue_plugin_load_full_syntax = 1
 " let g:vim_vue_plugin_debug = 1
@@ -626,12 +719,15 @@ let g:UltiSnipsEditSplit="vertical"
 "let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 "lightline
+            " \ 'colorscheme': 'seoul256',
 let g:lightline = {
-            \ 'colorscheme': 'seoul256',
+            \  'colorscheme': 'wombat',
             \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ], [ 'coc', 'branch', 'filename' ] ],
+            \   'left': [
+            \       [ 'mode', 'paste' ],
+            \       [ 'fugitive', 'lawrencium', 'filename', 'cocstatus', 'currentfunction' ] ],
             \   'right': [
-            \       [ 'lineinfo' ],
+            \       [ 'lineinfo'],
             \       [ 'percent' ],
             \       [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]
             \   ]
@@ -643,12 +739,16 @@ let g:lightline = {
             \   'linter_ok': 'lightline#ale#ok',
             \ },
             \ 'component_function': {
-            \   'branch': 'LightlineGitBranch',
+            \   'cocstatus': 'coc#status',
+            \   'currentfunction': 'CocCurrentFunction',
+            \   'fugitive': 'LightlineFugitive',
+            \   'lawrencium': 'LightlineLawrencium',
             \   'filename': 'LightlineFilename'
             \ }
             \ }
-
-
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
 function! LightlineModified()
     return &ft =~ 'help' ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
@@ -660,11 +760,13 @@ function! LightlineFilename()
                 \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
                 \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
 endfunction
-function! LightlineGitBranch()
-    if exists('*gitbranch#name')
-        return gitbranch#name()
-    endif
+function! LightlineFugitive()
+    return fugitive#head()
+endfunction
+
+function! LightlineLawrencium()
     return ''
+    " return lawrencium#statusline()
 endfunction
 
 command! LightlineReload call LightlineReload()
@@ -676,13 +778,3 @@ function! LightlineReload()
 endfunction
 
 
-" crystaline
-" function! StatusLine(...)
-"   return crystalline#mode() . crystalline#right_mode_sep('>')
-"         \ . '%t%h%w%m%r %{fugitive#head()}' . crystalline#right_sep('', 'Fill') . '%='
-"         \ . crystalline#left_sep('', 'Fill') . ' %{&ft} %l/%L %c%V %P '
-" endfunction
-" let g:crystalline_enable_sep = 1
-" let g:crystalline_statusline_fn = 'StatusLine'
-" let g:crystalline_theme = 'default'
-" set laststatus=2
