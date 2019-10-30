@@ -90,6 +90,7 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'kaicataldo/material.vim'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'sonph/onehalf', { 'rtp': 'vim' }
+Plug 'pbrisbin/vim-mkdir'
 
 
 "start page
@@ -127,6 +128,8 @@ Plug 'jlfwong/vim-mercenary'
 " Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
 " Plug 'lighttiger2505/deoplete-vim-lsp'
+"
+Plug 'elmcast/elm-vim'
 
 " == coc ==
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
@@ -677,6 +680,7 @@ else
     let s:eslintdir = getcwd()
 endif
 let g:ale_javascript_eslint_options = '--resolve-plugins-relative-to ' . s:eslintdir
+" let g:ale_javascript_jshint_executable = getcwd() . '/node_modules/jshint/bin/jshint'
 let g:ale_fixers = {
             \ 'javascript': ['eslint'],
             \ 'vue': ['eslint']

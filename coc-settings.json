@@ -1,6 +1,7 @@
 {
     "prettier.onlyUseLocalVersion": true,
     "prettier.disableLanguages": [],
+    "prettier.requireConfig": true,
     "eslint.options": { "resolvePluginsRelativeTo": "src/frontend" },
     "eslint.filetypes": ["javascript", "vue"],
     "diagnostic.errorSign": "❌",
